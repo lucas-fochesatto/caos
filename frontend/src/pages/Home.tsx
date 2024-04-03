@@ -1,5 +1,8 @@
-export default function Home() {
+export default function Home({ account}: { account: string | null; }) {
     return (
-        <h1 className="text-4xl font-bold">SUGOU INSANO :-)</h1>
+        <div className="pt-4">
+            <h1 className="text-3xl font-bold">Welcome to CAOS</h1>
+            <p>Connect your wallet in the header to get started!</p>
+        </div>
     )
 }

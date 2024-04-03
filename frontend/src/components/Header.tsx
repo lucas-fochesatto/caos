@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/react.svg';
 
 // Defining the Header component responsible for rendering the header section of the application
-export default function Header() {
+export default function Header({connectWallet, account}: {connectWallet: any; account: string | null;}) {
     // Using the `useNavigate` hook to get the navigate function for routing
     const navigate = useNavigate();
 
@@ -51,6 +51,12 @@ export default function Header() {
                         </li>
                     </ul>
                 </nav>
+                <button
+                    className="px-4 py-2 bg-yellow-500 text-white rounded shadow hover:bg-primary-600"
+                    onClick={connectWallet}
+                >
+                    {account ? "Connected: " + account?.substring(0,5) + "..." + account?.substring(38, 42) : "Connect Wallet"}
+                </button>
             </div>
         </header>
     );
