@@ -2,9 +2,10 @@
 import { useNavigate } from 'react-router-dom';
 // Importing the logo image
 import logo from '../assets/logoCaos.png';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 // Defining the Header component responsible for rendering the header section of the application
-export default function Header({connectWallet, account}: {connectWallet: any; account: string | null;}) {
+export default function Header() {
     // Using the `useNavigate` hook to get the navigate function for routing
     const navigate = useNavigate();
 
@@ -68,12 +69,7 @@ export default function Header({connectWallet, account}: {connectWallet: any; ac
                         </li>
                     </ul>
                 </nav>
-                <button
-                    className="mr-20 px-4 py-2 bg-mainColor text-white rounded shadow hover:bg-secondColor"
-                    onClick={connectWallet}
-                >
-                    {account ? "Connected: " + account?.substring(0,5) + "..." + account?.substring(38, 42) : "Connect Wallet"}
-                </button>
+                <WalletMultiButton/>
             </div>
         </header>
     );
