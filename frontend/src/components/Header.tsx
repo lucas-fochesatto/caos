@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 // Importing the logo image
 import logo from '../assets/logoCaos.png';
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import './Header.css';
 
 // Defining the Header component responsible for rendering the header section of the application
 export default function Header() {
@@ -11,11 +11,11 @@ export default function Header() {
 
     // Rendering the header section with logo, site name, and navigation links
     return (
-        <header className="bg-darkColor text-sky-100 py-4 px-6 shadow-lg sticky w-full top-0 z-20 backdrop-blur-lg">
+        <header className="bg-darkColor text-sky-100 py-4 px-20 shadow-lg sticky w-full top-0 z-20 backdrop-blur-lg">
             {/* Div containing header content */}
             <div className="flex justify-between items-center">
                 {/* Button with logo and site name */}
-                <button className="ml-20 flex items-center space-x-2"
+                <button className="flex items-center space-x-6"
                     // Navigate to the home page when the button is clicked
                     onClick={() => navigate('/')}
                 >
@@ -26,50 +26,10 @@ export default function Header() {
                         className="h-8" 
                     />
                     {/* Displaying the site name */}
-                    <h1 className=" text-white font-light">DAO your building</h1>
+                    <h1 className="text-white font-light">dao your building</h1>
                 </button>
-                {/* Navigation links */}
-                <nav>
-                    {/* Unordered list of navigation links */}
-                    <ul className="flex space-x-4 gap-8">
-                        {/* Navigation link for the OR page */}
-                        <li>
-                            <button className="text-lg text-mainColor hover:text-secondColor"
-                                // Navigate to the Home page when the button is clicked
-                                onClick={() => navigate('/or')}
-                            >
-                                Owner Relations
-                            </button>
-                        </li>
-                        {/* Navigation link for the Service Requests page */}
-                        <li>
-                            <button className="text-lg text-mainColor hover:text-secondColor"
-                                // Navigate to the Home page when the button is clicked
-                                onClick={() => navigate('/sr')}
-                            >
-                                Service Requests
-                            </button>
-                        </li>
-                        {/* Navigation link for the About page */}
-                        <li>
-                            <button className="text-lg text-mainColor hover:text-secondColor"
-                                // Navigate to the About page when the button is clicked
-                                onClick={() => navigate('/dashboards')}
-                            >
-                                Dashboards
-                            </button>
-                        </li>
-                        <li>
-                            <button className="text-lg text-mainColor hover:text-secondColor"
-                                // Navigate to the About page when the button is clicked
-                                onClick={() => navigate('/reports')}
-                            >
-                                Reports
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
-                <WalletMultiButton/>
+                
+                <button className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300'>login</button>
             </div>
         </header>
     );
