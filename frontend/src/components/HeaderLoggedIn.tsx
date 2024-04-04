@@ -27,7 +27,7 @@ export default function Header() {
                         className="h-8" 
                     />
                     {/* Displaying the site name */}
-                    <h1 className=" text-white font-light">dao your building</h1>
+                    <h1 className="text-white font-light">dao your building</h1>
                 </button>
                 {/* Navigation links */}
                 <nav>
@@ -39,7 +39,7 @@ export default function Header() {
                                 // Navigate to the Home page when the button is clicked
                                 onClick={() => navigate('/or')}
                             >
-                                Owner Relations
+                                owner relations
                             </button>
                         </li>
                         {/* Navigation link for the Service Requests page */}
@@ -48,7 +48,7 @@ export default function Header() {
                                 // Navigate to the Home page when the button is clicked
                                 onClick={() => navigate('/sr')}
                             >
-                                Service Requests
+                                service requests
                             </button>
                         </li>
                         {/* Navigation link for the About page */}
@@ -57,7 +57,7 @@ export default function Header() {
                                 // Navigate to the About page when the button is clicked
                                 onClick={() => navigate('/dashboards')}
                             >
-                                Dashboards
+                                dashboards
                             </button>
                         </li>
                         <li>
@@ -65,7 +65,7 @@ export default function Header() {
                                 // Navigate to the About page when the button is clicked
                                 onClick={() => navigate('/reports')}
                             >
-                                Reports
+                                reports
                             </button>
                         </li>
                     </ul>

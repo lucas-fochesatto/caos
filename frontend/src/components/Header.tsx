@@ -29,7 +29,7 @@ export default function Header() {
                     <h1 className="text-white font-light">dao your building</h1>
                 </button>
                 
-                <button className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300'>login</button>
+                <button onClick={() => navigate('/login')} className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300'>login</button>
             </div>
         </header>
     );

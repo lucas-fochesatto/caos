@@ -1,8 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import cF from '../assets/cashFlow.png';
 import img2 from '../assets/img2.png';
 import img3 from '../assets/img3.png';
+import { WalletContextState } from '@solana/wallet-adapter-react';
 
-export default function Home({ publicKey }: { connection: any; publicKey:any }) {
+export default function Home({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
+    const navigate = useNavigate()
+
     return (
         <>
             <div className="p-16 flex items-center justify-around gap-20">
@@ -11,8 +15,8 @@ export default function Home({ publicKey }: { connection: any; publicKey:any }) 
                     <p className='mt-5 text-xl text-white font-extralight'>CAOS simplifies transparency policies and makes compliance easier than ever.</p>
 
                     <div className='flex items-center gap-20 w-100% justify-center mt-12'>
-                        <button className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>SIGN UP</button>
-                        <button className='w-[7vw] py-2 rounded text-[#6D9EEB] border-[#1155CC] border bg-transparent font-bold hover:bg-[#6D9EEB] hover:text-white ease-in-out duration-300'>LOGIN</button>
+                        <button onClick={() => navigate('/login')} className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>SIGN UP</button>
+                        <button onClick={() => navigate('/login')} className='w-[7vw] py-2 rounded text-[#6D9EEB] border-[#1155CC] border bg-transparent font-bold hover:bg-[#6D9EEB] hover:text-white ease-in-out duration-300'>LOGIN</button>
                     </div>
                 </div>
                 <img src={img2} alt="" className= 'w-[40vw]'/>
@@ -34,7 +38,7 @@ export default function Home({ publicKey }: { connection: any; publicKey:any }) 
                     <p className='mt-5 text-xl text-white font-extralight'>Financial data & metrics available intuitively in Dashboard section and token-based voting system for issued decisions.  </p>
 
                     <div className='flex items-center gap-20 w-100% justify-center mt-12'>
-                        <button className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300'>SIGN UP</button>
+                        <button onClick={() => navigate('/login')} className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300'>SIGN UP</button>
                     </div>
                 </div>
                 <img src={img3} alt="" className= 'w-[40vw]'/>
