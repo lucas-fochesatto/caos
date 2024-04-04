@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+
 #root {
+  font-family: 'Oxanium';
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
