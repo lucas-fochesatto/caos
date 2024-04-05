@@ -33,31 +33,22 @@ export default function Header() {
                 <nav>
                     {/* Unordered list of navigation links */}
                     <ul className="flex space-x-4 gap-8">
-                        {/* Navigation link for the OR page */}
+                            {/* Navigation link for the About page */}
                         <li>
                             <button className="text-lg text-mainColor hover:text-secondColor"
-                                // Navigate to the Home page when the button is clicked
-                                onClick={() => navigate('/or')}
+                                // Navigate to the About page when the button is clicked
+                                onClick={() => navigate('/overview')}
                             >
-                                owner relations
+                                Overview
                             </button>
                         </li>
                         {/* Navigation link for the Service Requests page */}
                         <li>
                             <button className="text-lg text-mainColor hover:text-secondColor"
                                 // Navigate to the Home page when the button is clicked
-                                onClick={() => navigate('/sr')}
+                                onClick={() => navigate('/requests')}
                             >
-                                service requests
-                            </button>
-                        </li>
-                        {/* Navigation link for the About page */}
-                        <li>
-                            <button className="text-lg text-mainColor hover:text-secondColor"
-                                // Navigate to the About page when the button is clicked
-                                onClick={() => navigate('/dashboards')}
-                            >
-                                dashboards
+                                Requests
                             </button>
                         </li>
                         <li>
@@ -65,7 +56,15 @@ export default function Header() {
                                 // Navigate to the About page when the button is clicked
                                 onClick={() => navigate('/reports')}
                             >
-                                reports
+                                Reports
+                            </button>
+                        </li>
+                        <li>
+                            <button className="text-lg text-mainColor hover:text-secondColor"
+                                // Navigate to the About page when the button is clicked
+                                onClick={() => navigate('/events')}
+                            >
+                                Events
                             </button>
                         </li>
                     </ul>

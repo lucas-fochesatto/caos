@@ -5,10 +5,31 @@ import Home from './pages/Home'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import Login from './pages/Login'
 import Overview from './pages/Overview'
+import Reports from './pages/Reports'
+import Requests from './pages/Requests'
+import Events from './pages/Events'
+import ManagerLogin from './pages/ManagerLogin'
+import ManagerWalletConnect from './pages/ManagerWalletConnect'
+import ManagerBuildingInfo from './pages/ManagerBuildingInfo'
+import { ManagerSignupInfo } from './types/managerSignupInfo'
+import { useEffect, useState } from 'react'
+import ManagerOwnersInfo from './pages/ManagerOwnersInfo'
 
 function App() {
   const { connection } = useConnection();
   const wallet = useWallet();
+
+  const [manager, setManager] = useState<ManagerSignupInfo | null>(null)
+
+  useEffect(() => {
+    const newManager : ManagerSignupInfo = {
+      buldingName: "oi",
+      numberUnits: "0",
+      ownersPublicKey: "",
+      ownersUnit: ""
+    } 
+    setManager(newManager)
+  }, [])
 
   return (
     <BrowserRouter>
@@ -17,6 +38,14 @@ function App() {
           <Route path="/" element={<Home connection={connection} wallet={wallet} />} />
           <Route path="/login" element={<Login connection={connection} wallet={wallet} />} />
           <Route path="/overview" element={<Overview connection={connection} wallet={wallet} />} />
+          <Route path="/reports" element={<Reports connection={connection} wallet={wallet} />} />
+          <Route path="/requests" element={<Requests connection={connection} wallet={wallet} />} />
+          <Route path="/events" element={<Events connection={connection} wallet={wallet} />} />
+          <Route path="/manager" element={<ManagerLogin connection={connection} wallet={wallet} />} />
+          <Route path="/ManagerWalletConnect" element={<ManagerWalletConnect connection={connection} wallet={wallet} />} />
+          <Route path="/manager/signup/1" element={<ManagerWalletConnect connection={connection} wallet={wallet} />} />
+          <Route path="/manager/signup/2" element={<ManagerBuildingInfo info={manager} connection={connection} wallet={wallet} />} />
+          <Route path="/manager/signup/3" element={<ManagerOwnersInfo info={manager} connection={connection} wallet={wallet} />} />
         </Route>
       </Routes>
     </BrowserRouter>
