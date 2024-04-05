@@ -15,7 +15,7 @@ export default function Home({ connection, wallet }: { connection: any; wallet:W
                     <p className='mt-5 text-xl text-white font-extralight'>CAOS simplifies transparency policies and makes compliance easier than ever.</p>
 
                     <div className='flex items-center gap-20 w-100% justify-center mt-12'>
-                        <button onClick={() => navigate('/login')} className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>SIGN UP</button>
+                        <button onClick={() => navigate('/SignUp')} className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>SIGN UP</button>
                         <button onClick={() => navigate('/login')} className='w-[7vw] py-2 rounded text-[#6D9EEB] border-[#1155CC] border bg-transparent font-bold hover:bg-[#6D9EEB] hover:text-white ease-in-out duration-300'>LOGIN</button>
                     </div>
                 </div>

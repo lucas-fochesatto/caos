@@ -24,11 +24,10 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
             event.preventDefault()
             info.ownersPublicKey = event.target[0].value
             info.ownersUnit = event.target[1].value.toString()
-            
+            navigate('/manager/overview')
             console.log(info)
         }
-    }
-    
+    }  
     return (
         <>
             <div className="p-16 items-center flex justify-center flex-col">
