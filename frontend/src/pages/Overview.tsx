@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { WalletContextState } from "@solana/wallet-adapter-react";
 
 export default function Home({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
+    const navigate = useNavigate()
+    
     // Check if user is logged in:
     useEffect(() => {
-        if(wallet.connected) {
-            
+        if(!wallet.connected) {
+            navigate('/login')
         }
-    }, [wallet])
+    }, [wallet.connected])
     
     return (
         <>

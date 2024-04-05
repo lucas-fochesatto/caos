@@ -11,7 +11,7 @@ export default function Home({ connection, wallet }: { connection: any; wallet:W
     // Check if user is logged in:
     useEffect(() => {
         if(wallet.publicKey) {
-            navigate('/dashboard')
+            navigate('/overview')
         }
     }, [wallet.publicKey])
     
