@@ -1,21 +1,21 @@
 import express from 'express'
-import { getProperties, getProperty, addProperty } from './database.js'
+import { getManagers, getManager, addManager} from './database.js'
 
 
 const app = express()
 
-app.get('/properties', async (req, res) => {
-    const properties = await getProperties()
-    res.send(properties)
+app.get('/Managers', async (req, res) => {
+    const Managers = await getManagers()
+    res.send(Managers)
 })
 
-app.get('/properties/:id', async (req, res) => {
+app.get('/Managers/:id', async (req, res) => {
     const id = req.params.id
-    const note = await getProperty(id)
+    const note = await getManager(id)
     res.send(note)
 })
 
-app.post('/addProperty', async (req, res) => {
+app.post('/addManager', async (req, res) => {
     const { }
 })
 
