@@ -17,22 +17,32 @@ import { useEffect, useState } from 'react'
 import ManagerOwnersInfo from './pages/ManagerOwnersInfo'
 import ManagerOverview from './pages/ManagerOverview'
 import ManagerReports from './pages/ManagerReports'
+import writeJSON from './utils/writeJSON'
+
+
 
 
 function App() {
   const { connection } = useConnection();
   const wallet = useWallet();
 
-  const [manager, setManager] = useState<ManagerSignupInfo | null>(null)
+  const [manager, setManager] = useState<ManagerSignupInfo | null>(null);
+
 
   useEffect(() => {
     const newManager : ManagerSignupInfo = {
       buldingName: "oi",
-      numberUnits: "0",
-      ownersPublicKey: "",
-      ownersUnit: ""
+      numberUnits: 0,
+      residents: []
     } 
     setManager(newManager)
+
+    const m1 = {
+      address: "Lucas",
+      buildingName: "oi"
+    }
+
+    writeJSON(m1)
   }, [])
 
   return (

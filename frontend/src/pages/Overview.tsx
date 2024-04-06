@@ -89,7 +89,7 @@ export default function Home({ connection, wallet }: { connection: any; wallet:W
                     </div>
                 </div>
             </div>
-            <div className="flex flex-row items-baseline gap-4">
+            <div className="flex flex-row items-baseline gap- px-8">
                 <h1 className="text-3xl text-white">Comunication</h1>
                 <div className="flex items-end flex-grow w-[50vw] h-px bg-[#6D9EEB]"></div>
             </div>
