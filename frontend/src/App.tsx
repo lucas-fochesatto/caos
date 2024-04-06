@@ -1,4 +1,5 @@
 import './App.css'
+import {getProperties, getProperty, addProperty} from '../database.js'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './pages/Layout'
 import Home from './pages/Home'
