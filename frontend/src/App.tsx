@@ -37,13 +37,6 @@ function App() {
       residents: []
     } 
     setManager(newManager)
-
-    const m1 = {
-      address: "Lucas",
-      buildingName: "oi"
-    }
-
-    writeJSON(m1)
   }, [])
 
   return (
