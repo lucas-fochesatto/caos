@@ -23,6 +23,7 @@ export default function ManagerBuildingInfo({ info , account }: { info: ManagerS
             event.preventDefault()
             info.buldingName = event.target[0].value
             info.numberUnits = event.target[1].value.toString()
+            info.rent = event.target[2].value
             
             navigate('/manager/signup/3')
         }
@@ -45,6 +46,10 @@ export default function ManagerBuildingInfo({ info , account }: { info: ManagerS
                         <label className="w-[15vw] text-white text-xl" htmlFor="bnumber">Number of units: </label>
                         <input className="text-lg px-2 text-white outline-0 w-[80%] bg-transparent border-b border-[#1155CC]" type="number" name="bnumber" id="bnumber" required/>
                     </div>
+                    <div className="flex gap-5 items-center mt-10">
+                        <label className="w-[15vw] text-white text-xl" htmlFor="rent">Rent value (U$): </label>
+                        <input className="text-lg px-2 text-white outline-0 w-[80%] bg-transparent border-b border-[#1155CC]" type="number" name="rent" id="rent" required/>
+                    </div>
                     <button type="submit" className='mt-10 w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Continue</button>
                 </form>
                 <div className= "absolute right-12 border border-[#1155CC] p-5 rounded" >
@@ -58,7 +63,7 @@ export default function ManagerBuildingInfo({ info , account }: { info: ManagerS
                     </div>
                     <div className="flex items-center gap-3">
                         <img src={checked} alt="" />
-                        <p className="text-[#717171]">Owners Info</p>
+                        <p className="text-[#717171]">Residents Info</p>
                     </div>
                 </div>
             </div>

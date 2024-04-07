@@ -8,11 +8,15 @@ import checkedb from '../assets/checked-blue.svg'
 import { ManagerSignupInfo } from "../types/managerSignupInfo";
 import { GetAccountResult } from "../types/account";
 import { SDKState, useAccount } from '@metamask/sdk-react-ui';
+import { ethers } from 'ethers';
+import { abi, bytecode } from '../../artifacts/contracts/ERC20Token.sol/ERC20Token.json'
 
 export default function ManagerOwnersInfo({ info , account }: { info: ManagerSignupInfo |null ; account:SDKState }) {
     const navigate = useNavigate()
 
     const wallet = useAccount()
+      
+
     
     const [current, setCurrent] = useState(0)
     const [input, setInput] = useState({
@@ -40,7 +44,7 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
 
     const handleSubmit = async () => {
         if(info) {
-            info.residents[current] = input.publicKey
+            /* info.residents[current] = input.publicKey
             const newManager = {
                 wallet: wallet.address.toString()
             }
@@ -72,7 +76,41 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
                 const addedResident = await residentResponse.json()
                 console.log(addedResident)
             }
-            console.log(info.residents)
+            console.log(info.residents) */
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            await provider.send('eth_requestAccounts', [])
+            const signer = provider.getSigner()
+            
+            const factory = new ethers.ContractFactory(abi, bytecode, signer)
+            const token = await factory.deploy("MyToken", "TKN", 1000);
+            await token.waitForDeployment(); 
+            console.log("Token deployed to:", token.target);
+
+           /*  const Rent = await ethers.getContractFactory("Rent");
+            const rent = await Rent.deploy(token.target); 
+            await rent.waitForDeployment();
+            console.log("Rent contract deployed to:", rent.target);
+            await verify(rent.target, [token.target]);
+
+            const Events = await ethers.getContractFactory("Events");
+            const events = await Events.deploy(token.target, rent.target); 
+            await events.waitForDeployment();
+            console.log("Events contract deployed to:", events.target);
+            await verify(events.target, [token.target, rent.target]);
+
+            const Bills = await ethers.getContractFactory("Bills");
+            console.log("Deploying Bills contract...");
+            const bills = await Bills.deploy();
+            await bills.waitForDeployment();
+            console.log("Bills contract deployed to:", bills.target);
+            await verify(bills.target, []);
+
+            const Maintenance = await ethers.getContractFactory("Maintenance");
+            console.log("Deploying Maintenance contract...");
+            const maintenance = await Maintenance.deploy();
+            await maintenance.waitForDeployment();
+            console.log("Maintenance contract address:", maintenance.target);
+            await verify(maintenance.target, []); */
         }
     }  
     return (

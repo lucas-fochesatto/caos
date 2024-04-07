@@ -1,5 +1,6 @@
 export type ManagerSignupInfo = {
     buldingName: string,
     numberUnits: number,
-    residents: Array<string>
+    residents: Array<string>,
+    rent: number
   }
