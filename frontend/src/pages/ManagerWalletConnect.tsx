@@ -11,8 +11,53 @@ export default function ManagerWalletConnect({account} : {account:SDKState}) {
     
     // Check if user is logged in:
     useEffect(() => {
-        if(account.connected) {
-            navigate('/manager/signup/2')
+        if(account.connected)  {
+            const checkChain = async () => {
+                const chainId = await window.ethereum.request({ method: "eth_chainId"})
+                if(chainId != "0xe9ac0ce") {
+                    console.log(chainId)
+                    console.log("NOT CONNECTED TO NEON!")
+
+                    try {
+                        await window.ethereum 
+                            .request({
+                                method: "wallet_switchEthereumChain",
+                                params: [{ chainId: "0xf00" }],
+                            });
+                    } catch (switchError) {
+                        // This error code indicates that the chain has not been added to MetaMask.
+                        if (switchError.code === 4902) {
+                            try {
+                                await window.ethereum // Or window.ethereum if you don't support EIP-6963.
+                                    .request({
+                                        method: "wallet_addEthereumChain",
+                                        params: [
+                                            {   
+                                                chainId: "0xe9ac0ce",
+                                                chainName: "Neon EVM DevNet",
+                                                rpcUrls: ["https://devnet.neonevm.org/"],
+                                                nativeCurrency: {
+                                                    decimals: 18,
+                                                    name: "NEON",
+                                                    symbol: "NEON"
+                                                }
+                                            },
+                                        ],
+                                    });
+
+                                    navigate('/manager/signup/2')
+                            } catch (addError) {
+                                // Handle "add" error.
+                            }
+                        }
+                        // Handle other "switch" errors.
+                    }
+                } else {
+                    navigate('/manager/signup/2')
+                }
+            }
+
+            checkChain()
         }
     }, [account.connected])
     

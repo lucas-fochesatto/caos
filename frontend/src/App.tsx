@@ -2,7 +2,6 @@ import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './pages/Layout'
 import Home from './pages/Home'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import Overview from './pages/Overview'
@@ -41,7 +40,7 @@ function App() {
         <Route path="/" element={<Layout account={account}/>}>
           <Route path="/" element={<Home account={account} />} />
           <Route path="/login" element={<Login account={account} />} />
-          <Route path="/signup" element={<SignUp account={account} />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/overview" element={<Overview account={account} />} />
           <Route path="/reports" element={<Reports account={account} />} />
           <Route path="/requests" element={<Requests account={account} />} />

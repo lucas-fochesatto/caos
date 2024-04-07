@@ -2,7 +2,6 @@ import '../wallet-button.css'
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { GetAccountResult } from "../types/account";
 import { MetaMaskButton, SDKState} from "@metamask/sdk-react-ui";
 
 export default function Login({account} : {account:SDKState}) {
