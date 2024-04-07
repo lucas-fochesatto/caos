@@ -45,16 +45,9 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
             const ManagerOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newManager)}
 
             console.log("Trying to fetch...")
-            let response;
-
-            try {
-                response = await fetch('https://caosdatabase.onrender.com/addManager', ManagerOptions)
-            } catch(e) {
-                console.log(e)
-            }
-            
-            const addedManager = await response.json()
-            console.log(addedManager)
+            const response = await fetch('https://caosdatabase.onrender.com/Managers')
+            const data = await response.json()
+            console.log(data)
         }
     }  
     return (
