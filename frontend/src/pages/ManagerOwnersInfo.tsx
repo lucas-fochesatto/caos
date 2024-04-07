@@ -36,11 +36,25 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
         setCurrent(a => a-1)
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async () => {
         if(info) {
-            event.preventDefault()
-            info.residents.push(event.target[0].value)
-            console.log(info)
+            const newManager = {
+                wallet: wallet.publicKey.toString()
+            }
+
+            const ManagerOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newManager)}
+
+            console.log("Trying to fetch...")
+            let response;
+
+            try {
+                response = await fetch('https://caosdatabase.onrender.com/addManager', ManagerOptions)
+            } catch(e) {
+                console.log(e)
+            }
+            
+            const addedManager = await response.json()
+            console.log(addedManager)
         }
     }  
     return (
@@ -67,7 +81,7 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
                         : ""
                         }
                     </div>
-                    <button className='mt-10 w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Submit</button>
+                    <button onClick={handleSubmit} className='mt-10 w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Submit</button>
                 </div>
                 <div className= "absolute right-12 border border-[#1155CC] p-5 rounded" >
                     <div className="flex items-center gap-3">

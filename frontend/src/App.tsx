@@ -1,5 +1,4 @@
 import './App.css'
-import {getProperties, getProperty, addProperty} from '../database.js'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './pages/Layout'
 import Home from './pages/Home'
@@ -18,10 +17,6 @@ import { useEffect, useState } from 'react'
 import ManagerOwnersInfo from './pages/ManagerOwnersInfo'
 import ManagerOverview from './pages/ManagerOverview'
 import ManagerReports from './pages/ManagerReports'
-import writeJSON from './utils/writeJSON'
-
-
-
 
 function App() {
   const { connection } = useConnection();
