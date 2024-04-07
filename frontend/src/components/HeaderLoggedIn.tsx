@@ -69,7 +69,7 @@ export default function Header() {
                         </li>
                     </ul>
                 </nav>
-                <WalletMultiButton/>
+                <MetaMaskButton/>
             </div>
         </header>
     );

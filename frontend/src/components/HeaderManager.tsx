@@ -68,7 +68,7 @@ export default function HeaderManager() {
                         </li>
                     </ul>
                 </nav>
-                <WalletMultiButton/>
+                <MetaMaskButton/>
             </div>
         </header>
     );

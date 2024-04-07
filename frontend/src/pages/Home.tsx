@@ -4,6 +4,8 @@ import img2 from '../assets/img2.png';
 import img3 from '../assets/img3.png';
 import { WalletContextState } from '@solana/wallet-adapter-react';
 
+
+
 export default function Home({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
     const navigate = useNavigate()
 

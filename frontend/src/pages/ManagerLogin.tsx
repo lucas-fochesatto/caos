@@ -24,7 +24,7 @@ export default function ManagerLogin({ connection, wallet }: { connection: any; 
                 </div>
                 <div className="border border-[#1155CC] w-[45vw] py-10">
                     <p className="mb-12 text-white font-regular text-3xl">Connect your wallet to login</p>
-                    <WalletMultiButton />
+                    <MetaMaskButton />
                 </div>
                 <a href="/manager/signup/1" className="mt-2 text-[#6D9EEB] text-2xl underline	">sign up</a>
                 <div className="mt-20 w-[45vw]">

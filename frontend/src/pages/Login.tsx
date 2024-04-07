@@ -4,23 +4,78 @@ import { useEffect } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { WalletContextState } from "@solana/wallet-adapter-react";
+import { MetaMaskButton, useAccount, useToken } from "@metamask/sdk-react-ui";
 
 export default function Login({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
     const navigate = useNavigate()
-    
+
+    const {isConnected, address} = useAccount()
+
     // Check if user is logged in:
-    useEffect(() => {
+    /* useEffect(() => {
         if(wallet.publicKey) {
             navigate('/overview')
         }
-    }, [wallet.publicKey])
+    }, [wallet.publicKey]) */
+    useEffect(() => {
+        if(isConnected)  {
+            const checkChain = async () => {
+                const chainId = await window.ethereum.request({ method: "eth_chainId"})
+                if(chainId != "0xe9ac0ce") {
+                    console.log(chainId)
+                    console.log("NOT CONNECTED TO NEON!")
+
+                    try {
+                        await window.ethereum 
+                            .request({
+                                method: "wallet_switchEthereumChain",
+                                params: [{ chainId: "0xf00" }],
+                            });
+                    } catch (switchError) {
+                        // This error code indicates that the chain has not been added to MetaMask.
+                        if (switchError.code === 4902) {
+                            try {
+                                await window.ethereum // Or window.ethereum if you don't support EIP-6963.
+                                    .request({
+                                        method: "wallet_addEthereumChain",
+                                        params: [
+                                            {   
+                                                chainId: "0xe9ac0ce",
+                                                chainName: "Neon EVM DevNet",
+                                                rpcUrls: ["https://devnet.neonevm.org/"],
+                                                nativeCurrency: {
+                                                    decimals: 18,
+                                                    name: "NEON",
+                                                    symbol: "NEON"
+                                                }
+                                            },
+                                        ],
+                                    });
+
+                                    //navigate('/overview')
+                                    console.log(address)
+                            } catch (addError) {
+                                // Handle "add" error.
+                            }
+                        }
+                        // Handle other "switch" errors.
+                    }
+                } else {
+                    //navigate('/overview')
+                    console.log(address)
+                }
+            }
+
+            checkChain()
+        }
+    }, [isConnected])
     
     return (
         <>
             <div className="p-16 items-center flex justify-center flex-col">
                 <div className="border border-[#1155CC] w-[45vw] py-10">
                     <p className="mb-12 text-white font-regular text-3xl">Connect your wallet to login</p>
-                    <WalletMultiButton />
+                    <MetaMaskButton />
                 </div>
                 <div className="mt-20 w-[45vw]">
                     <div className="flex justify-between">

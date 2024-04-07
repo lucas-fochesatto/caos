@@ -26,7 +26,7 @@ export default function ManagerWalletConnect({ connection, wallet }: { connectio
                 </div>
                 <div className="w-[45vw] py-10">
                     <p className="mb-12 text-white font-regular text-3xl">Connect your wallet to get started</p>
-                    <WalletMultiButton />
+                    <MetaMaskButton />
                 </div>
                 <div className= "absolute right-12 border border-[#1155CC] p-5 rounded" >
                     <div className="flex items-center gap-3">

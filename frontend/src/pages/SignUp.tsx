@@ -20,7 +20,7 @@ export default function Login({ connection, wallet }: { connection: any; wallet:
             <div className="p-16 items-center flex justify-center flex-col">
                 <div className="border border-[#1155CC] w-[45vw] py-10">
                     <p className="mb-12 text-white font-regular text-3xl">Connect your wallet to login</p>
-                    <WalletMultiButton />
+                    <MetaMaskButton />
                 </div>
                 <div className="mt-20 w-[45vw]">
                     <div className="flex justify-between">

@@ -18,12 +18,18 @@ import ManagerOwnersInfo from './pages/ManagerOwnersInfo'
 import ManagerOverview from './pages/ManagerOverview'
 import ManagerReports from './pages/ManagerReports'
 
+import {
+  MetaMaskButton,
+  useAccount,
+  useSDK,
+  useSignMessage,
+} from "@metamask/sdk-react-ui";
+
 function App() {
   const { connection } = useConnection();
   const wallet = useWallet();
 
   const [manager, setManager] = useState<ManagerSignupInfo | null>(null);
-
 
   useEffect(() => {
     const newManager : ManagerSignupInfo = {
