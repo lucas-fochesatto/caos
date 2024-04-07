@@ -38,6 +38,7 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
 
     const handleSubmit = async () => {
         if(info) {
+            info.residents[current] = input.publicKey
             const newManager = {
                 wallet: wallet.publicKey.toString()
             }
@@ -45,9 +46,31 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
             const ManagerOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newManager)}
 
             console.log("Trying to fetch...")
-            const response = await fetch('https://caosdatabase.onrender.com/Managers')
-            const data = await response.json()
-            console.log(data)
+            const managerResponse = await fetch('https://caosdatabase.onrender.com/addManager', ManagerOptions)
+            //const response = await fetch('https://caosdatabase.onrender.com/Managers')
+            const addedManager = await managerResponse.json()
+            
+            const newProperty = {
+                "name": info.buldingName,
+                numberUnits: info.numberUnits,
+                managerID: addedManager.managerID
+            }
+
+            const PropertyOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newProperty)}
+            const propertyResponse = await fetch('https://caosdatabase.onrender.com/addProperty', PropertyOptions)
+            const addedProperty = await propertyResponse.json()
+
+            for(const resident of info.residents) {
+                const newResident = {
+                    wallet: resident,
+                    propertyID: addedProperty.propertyID
+                }
+                const ResidentOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newResident)}
+                const residentResponse = await fetch('https://caosdatabase.onrender.com/addResident', ResidentOptions)
+                const addedResident = await residentResponse.json()
+                console.log(addedResident)
+            }
+            console.log(info.residents)
         }
     }  
     return (
