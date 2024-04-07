@@ -9,7 +9,12 @@ import { ManagerSignupInfo } from "../types/managerSignupInfo";
 import { GetAccountResult } from "../types/account";
 import { SDKState, useAccount } from '@metamask/sdk-react-ui';
 import { ethers } from 'ethers';
-import { abi, bytecode } from '../../artifacts/contracts/ERC20Token.sol/ERC20Token.json'
+import { abi, bytecode } from '../../artifacts/contracts/ERC20Token.sol/ERC20Token.json' 
+import DeployERC20 from '../deploy/DeployERC20';
+import DeployRent from '../deploy/DeployRent';
+import DeployEvents from '../deploy/DeployEvents';
+import DeployBills from '../deploy/DeployBills';
+
 
 export default function ManagerOwnersInfo({ info , account }: { info: ManagerSignupInfo |null ; account:SDKState }) {
     const navigate = useNavigate()
@@ -81,36 +86,36 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
             await provider.send('eth_requestAccounts', [])
             const signer = provider.getSigner()
             
-            const factory = new ethers.ContractFactory(abi, bytecode, signer)
-            const token = await factory.deploy("MyToken", "TKN", 1000);
-            await token.waitForDeployment(); 
-            console.log("Token deployed to:", token.target);
+            DeployERC20(provider, signer);
+            DeployRent(provider, signer);
+            DeployEvents(provider, signer);
+            DeployBills(provider, signer);
+            // const factory = new ethers.ContractFactory(abi, bytecode, signer)
+            // const token = await factory.deploy("MyToken", "TKN", 1000);
+            // await token.waitForDeployment(); 
+            // console.log("Token deployed to:", token.target);
 
-           /*  const Rent = await ethers.getContractFactory("Rent");
-            const rent = await Rent.deploy(token.target); 
-            await rent.waitForDeployment();
-            console.log("Rent contract deployed to:", rent.target);
-            await verify(rent.target, [token.target]);
+            // const Rent = new ethers.ContractFactory(abi, bytecode, signer)
+            // const rent = await Rent.deploy(token.target); 
+            // await rent.waitForDeployment();
+            // console.log("Rent contract deployed to:", rent.target);
 
-            const Events = await ethers.getContractFactory("Events");
-            const events = await Events.deploy(token.target, rent.target); 
-            await events.waitForDeployment();
-            console.log("Events contract deployed to:", events.target);
-            await verify(events.target, [token.target, rent.target]);
+            // const Events = new ethers.ContractFactory(abi, bytecode, signer)
+            // const events = await Events.deploy(token.target, rent.target); 
+            // await events.waitForDeployment();
+            // console.log("Events contract deployed to:", events.target);
 
-            const Bills = await ethers.getContractFactory("Bills");
-            console.log("Deploying Bills contract...");
-            const bills = await Bills.deploy();
-            await bills.waitForDeployment();
-            console.log("Bills contract deployed to:", bills.target);
-            await verify(bills.target, []);
+            // const Bills = new ethers.ContractFactory(abi, bytecode, signer)
+            // console.log("Deploying Bills contract...");
+            // const bills = await Bills.deploy();
+            // await bills.waitForDeployment();
+            // console.log("Bills contract deployed to:", bills.target);
 
-            const Maintenance = await ethers.getContractFactory("Maintenance");
-            console.log("Deploying Maintenance contract...");
-            const maintenance = await Maintenance.deploy();
-            await maintenance.waitForDeployment();
-            console.log("Maintenance contract address:", maintenance.target);
-            await verify(maintenance.target, []); */
+            // const Maintenance = new ethers.ContractFactory(abi, bytecode, signer)
+            // console.log("Deploying Maintenance contract...");
+            // const maintenance = await Maintenance.deploy();
+            // await maintenance.waitForDeployment();
+            // console.log("Maintenance contract address:", maintenance.target);
         }
     }  
     return (
