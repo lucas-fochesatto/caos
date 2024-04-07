@@ -1,24 +1,15 @@
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import '../wallet-button.css'
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { WalletContextState } from "@solana/wallet-adapter-react";
-import { MetaMaskButton, useAccount, useToken } from "@metamask/sdk-react-ui";
+import { GetAccountResult } from "../types/account";
+import { MetaMaskButton, SDKState} from "@metamask/sdk-react-ui";
 
-export default function Login({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
+export default function Login({account} : {account:SDKState}) {
     const navigate = useNavigate()
 
-    const {isConnected, address} = useAccount()
-
-    // Check if user is logged in:
-    /* useEffect(() => {
-        if(wallet.publicKey) {
-            navigate('/overview')
-        }
-    }, [wallet.publicKey]) */
     useEffect(() => {
-        if(isConnected)  {
+        if(account.connected)  {
             const checkChain = async () => {
                 const chainId = await window.ethereum.request({ method: "eth_chainId"})
                 if(chainId != "0xe9ac0ce") {
@@ -52,8 +43,7 @@ export default function Login({ connection, wallet }: { connection: any; wallet:
                                         ],
                                     });
 
-                                    //navigate('/overview')
-                                    console.log(address)
+                                    navigate('/overview')
                             } catch (addError) {
                                 // Handle "add" error.
                             }
@@ -61,21 +51,20 @@ export default function Login({ connection, wallet }: { connection: any; wallet:
                         // Handle other "switch" errors.
                     }
                 } else {
-                    //navigate('/overview')
-                    console.log(address)
+                    navigate('/overview')
                 }
             }
 
             checkChain()
         }
-    }, [isConnected])
+    }, [account.connected])
     
     return (
         <>
             <div className="p-16 items-center flex justify-center flex-col">
                 <div className="border border-[#1155CC] w-[45vw] py-10">
                     <p className="mb-12 text-white font-regular text-3xl">Connect your wallet to login</p>
-                    <MetaMaskButton />
+                    <MetaMaskButton color="blue"/>
                 </div>
                 <div className="mt-20 w-[45vw]">
                     <div className="flex justify-between">

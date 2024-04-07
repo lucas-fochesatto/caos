@@ -18,17 +18,12 @@ import ManagerOwnersInfo from './pages/ManagerOwnersInfo'
 import ManagerOverview from './pages/ManagerOverview'
 import ManagerReports from './pages/ManagerReports'
 
-import {
-  MetaMaskButton,
-  useAccount,
-  useSDK,
-  useSignMessage,
-} from "@metamask/sdk-react-ui";
+import {useSDK} from "@metamask/sdk-react-ui";
 
 function App() {
-  const { connection } = useConnection();
-  const wallet = useWallet();
+  const account = useSDK()
 
+  
   const [manager, setManager] = useState<ManagerSignupInfo | null>(null);
 
   useEffect(() => {
@@ -43,20 +38,20 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout connection={connection} wallet={wallet}/>}>
-          <Route path="/" element={<Home connection={connection} wallet={wallet} />} />
-          <Route path="/login" element={<Login connection={connection} wallet={wallet} />} />
-          <Route path="/signup" element={<SignUp connection={connection} wallet={wallet} />} />
-          <Route path="/overview" element={<Overview connection={connection} wallet={wallet} />} />
-          <Route path="/reports" element={<Reports connection={connection} wallet={wallet} />} />
-          <Route path="/requests" element={<Requests connection={connection} wallet={wallet} />} />
-          <Route path="/events" element={<Events connection={connection} wallet={wallet} />} />
-          <Route path="/manager" element={<ManagerLogin connection={connection} wallet={wallet} />} />
-          <Route path="/manager/signup/1" element={<ManagerWalletConnect connection={connection} wallet={wallet} />} />
-          <Route path="/manager/signup/2" element={<ManagerBuildingInfo info={manager} connection={connection} wallet={wallet} />} />
-          <Route path="/manager/signup/3" element={<ManagerOwnersInfo info={manager} connection={connection} wallet={wallet} />} />
-          <Route path="/manager/overview" element={<ManagerOverview connection={connection} wallet={wallet} />} />
-          <Route path="/manager/reports" element={<ManagerReports connection={connection} wallet={wallet} />} />
+        <Route path="/" element={<Layout account={account}/>}>
+          <Route path="/" element={<Home account={account} />} />
+          <Route path="/login" element={<Login account={account} />} />
+          <Route path="/signup" element={<SignUp account={account} />} />
+          <Route path="/overview" element={<Overview account={account} />} />
+          <Route path="/reports" element={<Reports account={account} />} />
+          <Route path="/requests" element={<Requests account={account} />} />
+          <Route path="/events" element={<Events account={account} />} />
+          <Route path="/manager" element={<ManagerLogin account={account} />} />
+          <Route path="/manager/signup/1" element={<ManagerWalletConnect account={account} />} />
+          <Route path="/manager/signup/2" element={<ManagerBuildingInfo info={manager} account={account} />} />
+          <Route path="/manager/signup/3" element={<ManagerOwnersInfo info={manager} account={account} />} />
+          <Route path="/manager/overview" element={<ManagerOverview account={account} />} />
+          <Route path="/manager/reports" element={<ManagerReports account={account} />} />
         </Route>
       </Routes>
     </BrowserRouter>

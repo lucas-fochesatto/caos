@@ -1,23 +1,22 @@
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import '../wallet-button.css'
+    import '../wallet-button.css'
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { WalletContextState } from "@solana/wallet-adapter-react";
 
 import checked from '../assets/checked.svg'
 import checkedb from '../assets/checked-blue.svg'
 import { ManagerSignupInfo } from "../types/managerSignupInfo";
+import { GetAccountResult } from "../types/account";
 
-export default function ManagerBuildingInfo({ info ,connection, wallet }: { info: ManagerSignupInfo | null ;connection: any; wallet:WalletContextState }) {
+export default function ManagerBuildingInfo({ info , account }: { info: ManagerSignupInfo | null ; account:SDKState }) {
     const navigate = useNavigate()
     
     // Check if user is logged in:
     useEffect(() => {
-        if(!wallet.publicKey) {
-            navigate('/manager')
+        if(!account.connected) {
+            navigate('/manager/signup/1')
         }
-    }, [wallet.publicKey])
+    }, [account.connected]) 
 
     const handleSubmit = (event) => {
         if(info) {

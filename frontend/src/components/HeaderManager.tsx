@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logoCaos.png';
 import './Header.css';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { MetaMaskButton } from '@metamask/sdk-react-ui';
 
 // Defining the Header component responsible for rendering the header section of the application
 export default function HeaderManager() {

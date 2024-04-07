@@ -1,21 +1,20 @@
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import checked from '../assets/checked.svg'
-import checkedb from '../assets/checked-blue.svg'
 import '../wallet-button.css'
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { WalletContextState } from "@solana/wallet-adapter-react";
+import { GetAccountResult } from "../types/account";
+import { MetaMaskButton } from "@metamask/sdk-react-ui";
 
-export default function ManagerWalletConnect({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
+export default function ManagerWalletConnect({account} : {account:SDKState}) {
     const navigate = useNavigate()
     
     // Check if user is logged in:
     useEffect(() => {
-        if(wallet.publicKey) {
+        if(account.connected) {
             navigate('/manager/signup/2')
         }
-    }, [wallet.publicKey])
+    }, [account.connected])
     
     return (
         <>
@@ -26,7 +25,7 @@ export default function ManagerWalletConnect({ connection, wallet }: { connectio
                 </div>
                 <div className="w-[45vw] py-10">
                     <p className="mb-12 text-white font-regular text-3xl">Connect your wallet to get started</p>
-                    <MetaMaskButton />
+                    <MetaMaskButton color='blue' />
                 </div>
                 <div className= "absolute right-12 border border-[#1155CC] p-5 rounded" >
                     <div className="flex items-center gap-3">

@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import cF from '../assets/cashFlow.png';
 import img2 from '../assets/img2.png';
 import img3 from '../assets/img3.png';
-import { WalletContextState } from '@solana/wallet-adapter-react';
+import { GetAccountResult } from '../types/account';
 
 
 
-export default function Home({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
+export default function Home({account} : {account:SDKState}) {
     const navigate = useNavigate()
 
     return (

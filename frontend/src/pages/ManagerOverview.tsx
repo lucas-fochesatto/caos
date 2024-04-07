@@ -2,20 +2,20 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import '../wallet-button.css'
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { WalletContextState } from "@solana/wallet-adapter-react";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import check from '../assets/checked-blue.svg';
+import { GetAccountResult } from "../types/account";
 
-export default function Home({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
+export default function Home({account} : {account:SDKState}) {
     const navigate = useNavigate()
     
     // Check if user is logged in:
     useEffect(() => {
-        if(!wallet.connected) {
+        if(!account.connected) {
             navigate('/manager')
         }
-    }, [wallet.connected])
+    }, [account.connected])
     
     {var revenue = 1000;
      var btms = 50;

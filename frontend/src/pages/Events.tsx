@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import info from '../assets/infoLogo.svg';
 import img4 from '../assets/img4.png';
-import { WalletContextState } from '@solana/wallet-adapter-react';
 import { useState } from 'react';
+import { GetAccountResult } from '../types/account';
 
-export default function Requests({ connection, wallet }: { connection: any; wallet: WalletContextState }) {
+export default function Requests({account} : {account:SDKState}) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     

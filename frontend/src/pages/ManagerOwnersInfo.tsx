@@ -1,16 +1,18 @@
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import '../wallet-button.css'
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { WalletContextState } from "@solana/wallet-adapter-react";
 
 import checked from '../assets/checked.svg'
 import checkedb from '../assets/checked-blue.svg'
 import { ManagerSignupInfo } from "../types/managerSignupInfo";
+import { GetAccountResult } from "../types/account";
+import { SDKState, useAccount } from '@metamask/sdk-react-ui';
 
-export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: ManagerSignupInfo | null ;connection: any; wallet:WalletContextState }) {
+export default function ManagerOwnersInfo({ info , account }: { info: ManagerSignupInfo |null ; account:SDKState }) {
     const navigate = useNavigate()
+
+    const wallet = useAccount()
     
     const [current, setCurrent] = useState(0)
     const [input, setInput] = useState({
@@ -18,11 +20,11 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
     })
     
     // Check if user is logged in:
-    useEffect(() => {
-        if(!wallet.publicKey) {
+    /* useEffect(() => {
+        if(!account.connected) {
             navigate('/manager')
         }
-    }, [wallet.publicKey])
+    }, [account.connected]) */
 
     const handleNext = () => {
         info.residents[current] = input.publicKey
@@ -40,7 +42,7 @@ export default function ManagerOwnersInfo({ info ,connection, wallet }: { info: 
         if(info) {
             info.residents[current] = input.publicKey
             const newManager = {
-                wallet: wallet.publicKey.toString()
+                wallet: wallet.address.toString()
             }
 
             const ManagerOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newManager)}

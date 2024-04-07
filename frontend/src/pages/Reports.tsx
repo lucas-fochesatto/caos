@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import pdf from '../assets/pdf.svg';
 import img4 from '../assets/img4.png';
-import { WalletContextState } from '@solana/wallet-adapter-react';
+import { GetAccountResult } from '../types/account';
 
-export default function Reports({ connection, wallet }: { connection: any; wallet:WalletContextState }) {
+export default function Reports({account} : {account:SDKState}) {
     const navigate = useNavigate()
 
     return (
