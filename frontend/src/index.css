@@ -9,7 +9,7 @@
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
     height: 5px;
   }
   
@@ -23,5 +23,5 @@
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #578ee8;
+    background-color: #1a59bf;
   }

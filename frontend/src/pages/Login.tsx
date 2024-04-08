@@ -9,6 +9,10 @@ export default function Login({account} : {account:SDKState}) {
 
     useEffect(() => {
         if(account.connected)  {
+            const checkDatabase = async () => {
+                
+            }
+
             const checkChain = async () => {
                 const chainId = await window.ethereum.request({ method: "eth_chainId"})
                 if(chainId != "0xe9ac0ce") {

@@ -6,10 +6,8 @@ import { useNavigate } from "react-router-dom";
 import checked from '../assets/checked.svg'
 import checkedb from '../assets/checked-blue.svg'
 import { ManagerSignupInfo } from "../types/managerSignupInfo";
-import { GetAccountResult } from "../types/account";
 import { SDKState, useAccount } from '@metamask/sdk-react-ui';
 import { ethers } from 'ethers';
-import { abi, bytecode } from '../../artifacts/contracts/ERC20Token.sol/ERC20Token.json' 
 import DeployERC20 from '../deploy/DeployERC20';
 import DeployRent from '../deploy/DeployRent';
 import DeployEvents from '../deploy/DeployEvents';
@@ -21,9 +19,10 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
     const navigate = useNavigate()
 
     const wallet = useAccount()
-      
 
-    
+
+    const [message, setMessage] = useState<string>("")
+    const [submited, setSubmited] = useState<boolean>(false)
     const [current, setCurrent] = useState(0)
     const [input, setInput] = useState({
         publicKey: ""
@@ -37,92 +36,109 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
     }, [account.connected]) */
 
     const handleNext = () => {
-        info.residents[current] = input.publicKey
+        const newResident  = {
+            apartment: current,
+            rentValueInUsd: info.rent,
+            residentWallet: input.publicKey,
+            hasPaidRent: false
+        }
+        console.log(input.publicKey)
+        info.residents[current] = newResident
         setCurrent(a => a+1)
-        setInput({publicKey: info.residents[current+1] || ""})
+        setInput({publicKey: info.residents[current+1].residentWallet || ""})
     }
 
     const handlePrevious = () => {
-        info.residents[current] = input.publicKey
-        setInput({publicKey: info.residents[current-1]})
+        const newResident  = {
+            apartment: current,
+            rentValueInUsd: info.rent,
+            residentWallet: input.publicKey,
+            hasPaidRent: false
+        }
+        info.residents[current] = newResident
+        setInput({publicKey: info.residents[current-1].residentWallet})
         setCurrent(a => a-1)
     }
 
     const handleSubmit = async () => {
         if(info) {
-            /* info.residents[current] = input.publicKey
+            setSubmited(true)
+            const newResident  = {
+                apartment: current,
+                rentValueInUsd: info.rent,
+                residentWallet: input.publicKey,
+                hasPaidRent: false
+            }
+            info.residents[current] = newResident
+
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            await provider.send('eth_requestAccounts', [])
+            const signer = provider.getSigner()
+
+            console.log("deploying token...")
+            setMessage("Token is being deployed... ")
+            const tokenAddress = await DeployERC20(provider, signer);
+            console.log("deploying maintenance...")
+            setMessage("Maintenance is being deployed... ")
+            const maintenenceAddress = await DeployMaintenance(provider, signer);
+            console.log("deploying rent...")
+            setMessage("Rent is being deployed... ")
+            const rentAddress = await DeployRent(provider, signer, tokenAddress, info.residents);
+            console.log("deploying events...")
+            setMessage("Events is being deployed... ")
+            const eventsAddress = await DeployEvents(provider, signer, tokenAddress, rentAddress);
+            console.log("deploying bills...")
+            setMessage("Bills is being deployed... ")
+            const billsAddress = await DeployBills(provider, signer);
+
             const newManager = {
                 wallet: wallet.address.toString()
             }
 
+            // const dburl = 'http://localhost:8080/'
+            const dburl = 'https://caosdatabase.onrender.com/'
+
             const ManagerOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newManager)}
 
             console.log("Trying to fetch...")
-            const managerResponse = await fetch('https://caosdatabase.onrender.com/addManager', ManagerOptions)
-            //const response = await fetch('https://caosdatabase.onrender.com/Managers')
+            const managerResponse = await fetch(dburl + 'addManager', ManagerOptions)
             const addedManager = await managerResponse.json()
-            
+            console.log(addedManager)
+
             const newProperty = {
-                "name": info.buldingName,
-                numberUnits: info.numberUnits,
+                propertyName: info.buldingName,
+                Rent: rentAddress,
+                Bills: billsAddress,
+                Maintenance: maintenenceAddress,
+                Event: eventsAddress,
+                ERC: tokenAddress,
                 managerID: addedManager.managerID
             }
 
             const PropertyOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newProperty)}
-            const propertyResponse = await fetch('https://caosdatabase.onrender.com/addProperty', PropertyOptions)
+            const propertyResponse = await fetch(dburl + 'addProperty', PropertyOptions)
             const addedProperty = await propertyResponse.json()
+            console.log(addedProperty)
 
             for(const resident of info.residents) {
                 const newResident = {
-                    wallet: resident,
+                    wallet: resident.residentWallet,
                     propertyID: addedProperty.propertyID
                 }
                 const ResidentOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newResident)}
-                const residentResponse = await fetch('https://caosdatabase.onrender.com/addResident', ResidentOptions)
+                const residentResponse = await fetch(dburl + 'addResident', ResidentOptions)
                 const addedResident = await residentResponse.json()
                 console.log(addedResident)
             }
-            console.log(info.residents) */
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            await provider.send('eth_requestAccounts', [])
-            const signer = provider.getSigner()
-            
-            DeployERC20(provider, signer);
-            DeployMaintenance(provider, signer);
-            // DeployRent(provider, signer);
-            // DeployEvents(provider, signer);
-            // DeployBills(provider, signer);
-            // const factory = new ethers.ContractFactory(abi, bytecode, signer)
-            // const token = await factory.deploy("MyToken", "TKN", 1000);
-            // await token.waitForDeployment(); 
-            // console.log("Token deployed to:", token.target);
 
-            // const Rent = new ethers.ContractFactory(abi, bytecode, signer)
-            // const rent = await Rent.deploy(token.target); 
-            // await rent.waitForDeployment();
-            // console.log("Rent contract deployed to:", rent.target);
-
-            // const Events = new ethers.ContractFactory(abi, bytecode, signer)
-            // const events = await Events.deploy(token.target, rent.target); 
-            // await events.waitForDeployment();
-            // console.log("Events contract deployed to:", events.target);
-
-            // const Bills = new ethers.ContractFactory(abi, bytecode, signer)
-            // console.log("Deploying Bills contract...");
-            // const bills = await Bills.deploy();
-            // await bills.waitForDeployment();
-            // console.log("Bills contract deployed to:", bills.target);
-
-            // const Maintenance = new ethers.ContractFactory(abi, bytecode, signer)
-            // console.log("Deploying Maintenance contract...");
-            // const maintenance = await Maintenance.deploy();
-            // await maintenance.waitForDeployment();
-            // console.log("Maintenance contract address:", maintenance.target);
+            navigate('/overview')
         }
     }  
     return (
         <>
             <div className="p-16 items-center flex justify-center flex-col">
+                {!submited ? 
+                <>
                 <div className="mb-10 text-center text-white">
                     <h1 className="text-3xl">Welcome, dear manager!</h1>
                     <p className="text-2xl text-[#6D9EEB]">Please enter owners info or click "Submit" to do it later</p>
@@ -160,6 +176,16 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
                         <p className="text-[#717171]">Owners Info</p>
                     </div>
                 </div>
+                </>
+                :
+                <>
+                <div className="mb-10 text-center text-white">
+                    <h1 className="text-3xl">Now, we're going to deploy your contracts to NEON Network</h1>
+                    <p className="text-2xl text-[#6D9EEB]">{message}</p>
+                    <h1 className="mt-5 text-3xl">Please, authorize the transaction</h1>
+                </div>
+                </>
+                }
             </div>
             <Footer />
         </>
