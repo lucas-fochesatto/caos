@@ -7,8 +7,9 @@ export default async function DeployBills(provider, signer) {
     await provider.send('eth_requestAccounts', [])
 
     const factory = new ethers.ContractFactory(abi, bytecode, signer)
-    const token = await factory.deploy("MyToken", "TKN", 1000);
-    await token.waitForDeployment(); 
-    console.log("Bills deployed to:", token.target);
+    const token = await factory.deploy();
+    const tx = await token.deployTransaction.wait();
+    console.log("Bills deployed to:", tx.contractAddress);
 
+    return tx.contractAddress;
 }

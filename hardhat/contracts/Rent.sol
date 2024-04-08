@@ -26,7 +26,7 @@ contract Rent {
         i_owner = msg.sender;
         tokenContract = ERC20Token(_tokenContract);
         for(uint256 i = 0; i < _residents.length; i++) {
-            residents[0] = _residents[i];
+            residents.push(_residents[i]);
         }
     }
 

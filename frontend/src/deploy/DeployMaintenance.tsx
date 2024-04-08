@@ -10,4 +10,6 @@ export default async function DeployMaintenance(provider, signer) {
     const token = await factory.deploy();
     const tx = await token.deployTransaction.wait();
     console.log("Maintenance deployed to:", tx.contractAddress);
+
+    return tx.contractAddress
 }
