@@ -62,6 +62,8 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
 
     const handleSubmit = async () => {
         if(info) {
+            const dburl = 'http://localhost:8080/'
+            // const dburl = 'https://caosdatabase.onrender.com/'
             setSubmited(true)
             const newResident  = {
                 apartment: current,
@@ -78,25 +80,66 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
             console.log("deploying token...")
             setMessage("Token is being deployed... ")
             const tokenAddress = await DeployERC20(provider, signer);
+            setMessage('Verifyng token contract...')
+            const verifyERCOptions = { 
+                method:'POST',
+                mode:'cors', 
+                headers:{ 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({tokenAddress})
+            }
+            await fetch(dburl + 'verifyERC20', verifyERCOptions)
+
             console.log("deploying maintenance...")
             setMessage("Maintenance is being deployed... ")
             const maintenenceAddress = await DeployMaintenance(provider, signer);
+            setMessage('Verifyng maintenence contract...')
+            const verifyMaintenenceOptions = {
+                method:'POST',
+                mode:'cors', 
+                headers:{ 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({maintenenceAddress})
+            }
+            await fetch(dburl + 'verifyMaintenence', verifyMaintenenceOptions)
+
             console.log("deploying rent...")
             setMessage("Rent is being deployed... ")
             const rentAddress = await DeployRent(provider, signer, tokenAddress, info.residents);
+            setMessage('Verifyng rent contract...')
+            const verifyRentOptions = {
+                method:'POST',
+                mode:'cors', 
+                headers:{ 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({rentAddress, tokenAddress, residents: info.residents})
+            }
+            await fetch(dburl + 'verifyRent', verifyRentOptions)
+            
             console.log("deploying events...")
             setMessage("Events is being deployed... ")
             const eventsAddress = await DeployEvents(provider, signer, tokenAddress, rentAddress);
+            setMessage('Verifyng events contract...')
+            const verifyEventsOptions = {
+                method:'POST',
+                mode:'cors', 
+                headers:{ 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({eventsAddress, rentAddress, tokenAddress})
+            }
+            await fetch(dburl + 'verifyEvents', verifyEventsOptions)
+
             console.log("deploying bills...")
             setMessage("Bills is being deployed... ")
             const billsAddress = await DeployBills(provider, signer);
+            setMessage('Verifyng bills contract...')
+            const verifyBillsOptions = {
+                method:'POST',
+                mode:'cors', 
+                headers:{ 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({billsAddress})
+            }
+            await fetch(dburl + 'verifyBills', verifyBillsOptions)
 
             const newManager = {
                 wallet: wallet.address.toString()
             }
-
-            // const dburl = 'http://localhost:8080/'
-            const dburl = 'https://caosdatabase.onrender.com/'
 
             const ManagerOptions = { method:'POST', mode:'cors', headers:{ 'Content-Type': 'application/json' }, body: JSON.stringify(newManager)}
 
