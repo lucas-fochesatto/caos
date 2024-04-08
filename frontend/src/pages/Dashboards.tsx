@@ -57,33 +57,6 @@ export default function Home() {
         ],
     };
 
-    const PersonalExpensesData = {
-        January: {
-            Rent: 250,
-            Maintenance: 300,
-        },
-        February: {
-            Rent: 270,
-            Maintenance: 320,
-        },
-        March: {
-            Rent: 280,
-            Maintenance: 330,
-        },
-        April: {
-            Rent: 260,
-            Maintenance: 310,
-        },
-        May: {
-            Rent: 290,
-            Maintenance: 340,
-        },
-        July: {
-            Rent: 300,
-            Maintenance: 350,
-        }
-    };
-
     const RequestsListData = {
         January: [
             { name: 'Replace Shower', value: 50 },
@@ -170,18 +143,7 @@ export default function Home() {
         },
     };
 
-    const cascadeBarChartOptions = {
-        resposive: true,
-        scales: {
-            x: {
-                stacked: true,
-            },
-            y: {
-                stacked: true,
-                suggestedMin: 0,
-            },
-        },
-    };
+    
 
     return (
         <>
@@ -221,7 +183,6 @@ export default function Home() {
                         )}
                         {selectedGroup === 'Personal' && (
                             <>
-                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Personal Expenses')}>Personal Expenses</button>
                                 <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Requests List')}>Requests List</button>
                                 <div className="mb-4">
                                     <label className="mr-2">Select Month:</label>
@@ -249,26 +210,6 @@ export default function Home() {
                                 data={TotalStoredData}
                                 options={lineChartOptions}
                             />
-                        )}
-                        {selectedChart === 'Personal Expenses' && (
-                            <div className="mb-4 w-full">
-                                <h1 className="text-3xl text-white text-center">Personal Expenses for {selectedMonth}</h1> {/* Centered text */}
-                                <Bar 
-                                    data={{
-                                        labels: ['Rent', 'Maintenance'],
-                                        datasets: [
-                                            {
-                                                label: `Personal Expenses for ${selectedMonth}`,
-                                                data: Object.values(PersonalExpensesData[selectedMonth]),
-                                                backgroundColor: ['#A6CAEC', '#407BFF'],
-                                                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
-                                                borderWidth: 1,
-                                            }
-                                        ]
-                                    }}
-                                    options={cascadeBarChartOptions} 
-                                />
-                            </div>
                         )}
                         {selectedChart === 'Requests List' && (
                             <div className="mb-4 w-1/2">
