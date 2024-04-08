@@ -19,16 +19,109 @@ export async function getManager(id) {
     const [result] = await pool.query(`
     SELECT *
     FROM Managers
-    WHERE id = ?
+    WHERE managerID = ?
     `, [id])
     return result[0]
 }
 
-export async function addManager(manager, building){
+
+export async function addManager(wallet){
     const [result] = await pool.query(`
-    INSERT INTO Managers (manager, building)
-    VALUES(?,?)
-    `, [manager, building])
+    INSERT INTO Managers (wallet)
+    VALUES(?)
+    `, [wallet])
     const id = result.insertId
     return getManager(id)
+}
+
+export async function getResidents(){
+    const [result] = await pool.query("SELECT * FROM Residents")
+    return result
+}
+
+export async function getResident(id) {
+    const [result] = await pool.query(`
+    SELECT *
+    FROM Residents
+    WHERE residentID = ?
+    `, [id])
+    return result[0]
+}
+
+export async function addResident(wallet){
+    const [result] = await pool.query(`
+    INSERT INTO Residents (wallet)
+    VALUES(?)
+    `, [wallet])
+    const id = result.insertId
+    return getResident(id)
+}
+
+export async function getProperties(){
+    const [result] = await pool.query("SELECT * FROM Properties")
+    return result
+}
+
+export async function getProperty(id) {
+    const [result] = await pool.query(`
+    SELECT *
+    FROM Properties
+    WHERE propertyID = ?
+    `, [id])
+    return result[0]
+}
+
+export async function addProperty(Rent, Bills, Maintenance, Events, ERC, managerID){
+    const [result] = await pool.query(`
+    INSERT INTO Properties (Rent, Bills, Maintenance, Events, ERC, managerID)
+    VALUES(?,?,?,?,?,?)
+    `, [Rent, Bills, Maintenance, Events, ERC, managerID])
+    const id = result.insertId
+    return getProperty(id)
+}
+
+export async function getResidentsTransactions(){
+    const [result] = await pool.query("SELECT * FROM ResidentsTransactions")
+    return result
+}
+
+export async function getResidentTransaction(id) {
+    const [result] = await pool.query(`
+    SELECT *
+    FROM ResidentsTransactions
+    WHERE resitrID = ?
+    `, [id])
+    return result[0]
+}
+
+export async function addResidentTransaction(value, type, residentID){
+    const [result] = await pool.query(`
+    INSERT INTO ResidentsTransactions (value, type, residentID)
+    VALUES(?,?,?)
+    `, [value, type, residentID])
+    const id = result.insertId
+    return getResidentTransaction(id)
+}
+
+export async function getPropertiesTransactions(){
+    const [result] = await pool.query("SELECT * FROM PropertiesTransactions")
+    return result
+}
+
+export async function getPropertyTransaction(id) {
+    const [result] = await pool.query(`
+    SELECT *
+    FROM PropertiesTransactions
+    WHERE resitrID = ?
+    `, [id])
+    return result[0]
+}
+
+export async function addPropertyTransaction(value, type, propertyID){
+    const [result] = await pool.query(`
+    INSERT INTO PropertiesTransactions (value, type, propertyID)
+    VALUES(?,?,?)
+    `, [value, type, propertyID])
+    const id = result.insertId
+    return getPropertyTransaction(id)
 }

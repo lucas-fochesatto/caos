@@ -186,132 +186,134 @@ export default function Home() {
 
     return (
         <>
-            <div className="p-12 items-left flex justify-left flex-row gap-8">
-            </div>
-            <div className="p-12">
-                <div className="flex flex justify-center">
+        <div className="flex items-center justify-center">
+            <div className="w-3/5"> {/* Added w-full class here */}
+                <div>
                     <h1 className="text-3xl text-white">{selectedChart === 'Monthly Analysis' ? 'Monthly Analysis' : ''}</h1>
                     <h1 className="text-3xl text-white">{selectedChart === 'Total Stored' ? 'Total Stored' : ''}</h1>
                     <h1 className="text-3xl text-white">{selectedChart === 'Personal Expenses' ? 'Personal Expenses' : ''}</h1>
                     <h1 className="text-3xl text-white">{selectedChart === 'Requests List' ? 'Requests List' : ''}</h1>
                 </div>
-                <div className="flex flex-col items-center text-white">
+                <div className="text-white">
                     <div className="mb-4">
                         <button className="mr-2" onClick={() => setSelectedGroup('General')}>General</button>
                         <button className="mr-2" onClick={() => setSelectedGroup('Personal')}>Personal</button>
                     </div>
-                    {selectedGroup === 'General' && (
                     <div className="mb-4">
-                        <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Monthly Analysis')}>Monthly Analysis</button>
-                        <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Total Stored')}>Total Stored</button>
-                        <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Costs Breakdown')}>Costs Breakdown</button>
-                        {selectedChart === 'Costs Breakdown' && (
-                            <div className="mt-4">
-                                <label className="mr-2">Select Month:</label>
-                                <select className="text-black" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-                                    <option value="January">January</option>
-                                    <option value="February">February</option>
-                                    <option value="March">March</option>
-                                    <option value="April">April</option>
-                                    <option value="May">May</option>
-                                    <option value="July">July</option>
-                                </select>
+                        {selectedGroup === 'General' && (
+                            <>
+                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Monthly Analysis')}>Monthly Analysis</button>
+                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Total Stored')}>Total Stored</button>
+                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Costs Breakdown')}>Costs Breakdown</button>
+                                {selectedChart === 'Costs Breakdown' && (
+                                    <div className="mb-4">
+                                        <label className="mr-2">Select Month:</label>
+                                        <select className="text-black" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+                                            <option value="January">January</option>
+                                            <option value="February">February</option>
+                                            <option value="March">March</option>
+                                            <option value="April">April</option>
+                                            <option value="May">May</option>
+                                            <option value="July">July</option>
+                                        </select>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                        {selectedGroup === 'Personal' && (
+                            <>
+                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Personal Expenses')}>Personal Expenses</button>
+                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Requests List')}>Requests List</button>
+                                <div className="mb-4">
+                                    <label className="mr-2">Select Month:</label>
+                                    <select className="text-black" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+                                        <option value="January">January</option>
+                                        <option value="February">February</option>
+                                        <option value="March">March</option>
+                                        <option value="April">April</option>
+                                        <option value="May">May</option>
+                                        <option value="July">July</option>
+                                    </select>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    <div className="flex flex-cols w-full items-center justify-center"> {/* Updated alignment */}
+                        {selectedChart === 'Monthly Analysis' && (
+                            <Line 
+                                data={MonthlyExpensesData}
+                                options={lineChartOptions}
+                            />
+                        )}
+                        {selectedChart === 'Total Stored' && (
+                            <Line 
+                                data={TotalStoredData}
+                                options={lineChartOptions}
+                            />
+                        )}
+                        {selectedChart === 'Personal Expenses' && (
+                            <div className="mb-4 w-full">
+                                <h1 className="text-3xl text-white text-center">Personal Expenses for {selectedMonth}</h1> {/* Centered text */}
+                                <Bar 
+                                    data={{
+                                        labels: ['Rent', 'Maintenance', 'Requests'],
+                                        datasets: [{
+                                            label: `Personal Expenses for ${selectedMonth}`,
+                                            data: Object.values(PersonalExpensesData[selectedMonth]),
+                                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+                                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                                            borderWidth: 1,
+                                        }]
+                                    }}
+                                    options={barChartOptions} 
+                                />
+                            </div>
+                        )}
+                        {selectedChart === 'Requests List' && (
+                            <div className="mb-4 w-1/2">
+                                <h1 className="text-3xl text-white text-center">Requests List for {selectedMonth}</h1> {/* Centered text */}
+                                <table style={{ width: '100%' }}>
+                                    <thead>
+                                        <tr className="text-2xl flex justify-between bg-blue-700 mb-1">
+                                            <th>Request</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {RequestsListData[selectedMonth].map((request, index) => (
+                                            <tr key={index} className={`text-2xl flex justify-between border border-emerald-500 ${index % 2 === 0 ? 'bg-gray-400' : 'bg-[#6D9EEB]'}`}>
+                                                <td>{request.name}</td>
+                                                <td>{request.value}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+
+                        {selectedGroup === 'General' && selectedChart === 'Costs Breakdown' && (
+                            <div className="mt-4 w-full">
+                                <h1 className="text-3xl text-white text-center">Costs for {selectedMonth}</h1> {/* Centered text */}
+                                <Doughnut 
+                                    data={{
+                                        labels: Object.keys(CostsBreakdownData[selectedMonth]),
+                                        datasets: [{
+                                            label: `Costs Breakdown for ${selectedMonth}`,
+                                            data: Object.values(CostsBreakdownData[selectedMonth]),
+                                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+                                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                                            borderWidth: 1,
+                                        }]
+                                    }} 
+                                    options={doughnutChartOptions} 
+                                />
                             </div>
                         )}
                     </div>
-                    )}
-                    {selectedGroup === 'Personal' && (
-                    <div className="mb-4">
-                        <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Personal Expenses')}>Personal Expenses</button>
-                        <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Requests List')}>Requests List</button>
-                        {/* Dropdown for selectedGroup === 'Personal' */}
-                        <div className="mt-4">
-                            <label className="mr-2">Select Month:</label>
-                            <select className="text-black" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="July">July</option>
-                            </select>
-                        </div>
-                    </div>
-                    )}
-
-                    {selectedChart === 'Monthly Analysis' && (
-                        <Line 
-                            data={MonthlyExpensesData}
-                            options={lineChartOptions}
-                        />
-                    )}
-                    {selectedChart === 'Total Stored' && (
-                        <Line 
-                            data={TotalStoredData}
-                            options={lineChartOptions}
-                        />
-                    )}
-                    {selectedChart === 'Personal Expenses' && (
-                        <div className="mb-4">
-                            <h1 className="text-3xl text-white">Personal Expenses for {selectedMonth}</h1>
-                            <Bar 
-                                data={{
-                                    labels: ['Rent', 'Maintenance', 'Requests'],
-                                    datasets: [{
-                                        label: `Personal Expenses for ${selectedMonth}`,
-                                        data: Object.values(PersonalExpensesData[selectedMonth]),
-                                        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-                                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-                                        borderWidth: 1,
-                                    }]
-                                }}
-                                options={barChartOptions} 
-                            />
-                        </div>
-                    )}
-
-                    {selectedChart === 'Requests List' && (
-                        <div className="mb-4">
-                            <h1 className="text-3xl text-white">Requests List for {selectedMonth}</h1>
-                            <table style={{ width: '100%' }}>
-                                <thead>
-                                    <tr>
-                                        <th>Request</th>
-                                        <th>Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {RequestsListData[selectedMonth].map((request, index) => (
-                                        <tr key={index}>
-                                            <td>{request.name}</td>
-                                            <td>{request.value}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-
-                    {selectedGroup === 'General' && selectedChart === 'Costs Breakdown' && (
-                        <div className="mt-4">
-                            <h1 className="text-3xl text-white">Costs for {selectedMonth}</h1>
-                            <Doughnut 
-                                data={{
-                                    labels: Object.keys(CostsBreakdownData[selectedMonth]),
-                                    datasets: [{
-                                        label: `Costs Breakdown for ${selectedMonth}`,
-                                        data: Object.values(CostsBreakdownData[selectedMonth]),
-                                        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-                                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-                                        borderWidth: 1,
-                                    }]
-                                }} 
-                                options={doughnutChartOptions} 
-                            />
-                        </div>
-                    )}
                 </div>
             </div>
+        </div>
         </>
     );
 }
