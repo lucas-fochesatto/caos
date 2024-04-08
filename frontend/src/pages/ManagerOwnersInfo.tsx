@@ -14,6 +14,7 @@ import DeployERC20 from '../deploy/DeployERC20';
 import DeployRent from '../deploy/DeployRent';
 import DeployEvents from '../deploy/DeployEvents';
 import DeployBills from '../deploy/DeployBills';
+import DeployMaintenance from '../deploy/DeployMaintenance';
 
 
 export default function ManagerOwnersInfo({ info , account }: { info: ManagerSignupInfo |null ; account:SDKState }) {
@@ -87,9 +88,10 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
             const signer = provider.getSigner()
             
             DeployERC20(provider, signer);
-            DeployRent(provider, signer);
-            DeployEvents(provider, signer);
-            DeployBills(provider, signer);
+            DeployMaintenance(provider, signer);
+            // DeployRent(provider, signer);
+            // DeployEvents(provider, signer);
+            // DeployBills(provider, signer);
             // const factory = new ethers.ContractFactory(abi, bytecode, signer)
             // const token = await factory.deploy("MyToken", "TKN", 1000);
             // await token.waitForDeployment(); 
