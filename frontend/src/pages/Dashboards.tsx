@@ -20,7 +20,7 @@ export default function Home() {
     };
 
     const MonthlyExpensesData = {
-        labels: ['January', 'Fevereiro', 'March', 'April', 'May', 'July'],
+        labels: ['January', 'February', 'March', 'April', 'May', 'July'],
         datasets: [
             {
                 label: 'Costs',
@@ -61,32 +61,26 @@ export default function Home() {
         January: {
             Rent: 250,
             Maintenance: 300,
-            Requests: 300
         },
         February: {
             Rent: 270,
             Maintenance: 320,
-            Requests: 280
         },
         March: {
             Rent: 280,
             Maintenance: 330,
-            Requests: 290
         },
         April: {
             Rent: 260,
             Maintenance: 310,
-            Requests: 320
         },
         May: {
             Rent: 290,
             Maintenance: 340,
-            Requests: 310
         },
         July: {
             Rent: 300,
             Maintenance: 350,
-            Requests: 330
         }
     };
 
@@ -176,9 +170,14 @@ export default function Home() {
         },
     };
 
-    const barChartOptions = {
+    const cascadeBarChartOptions = {
+        resposive: true,
         scales: {
+            x: {
+                stacked: true,
+            },
             y: {
+                stacked: true,
                 suggestedMin: 0,
             },
         },
@@ -256,16 +255,18 @@ export default function Home() {
                                 <h1 className="text-3xl text-white text-center">Personal Expenses for {selectedMonth}</h1> {/* Centered text */}
                                 <Bar 
                                     data={{
-                                        labels: ['Rent', 'Maintenance', 'Requests'],
-                                        datasets: [{
-                                            label: `Personal Expenses for ${selectedMonth}`,
-                                            data: Object.values(PersonalExpensesData[selectedMonth]),
-                                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
-                                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-                                            borderWidth: 1,
-                                        }]
+                                        labels: ['Rent', 'Maintenance'],
+                                        datasets: [
+                                            {
+                                                label: `Personal Expenses for ${selectedMonth}`,
+                                                data: Object.values(PersonalExpensesData[selectedMonth]),
+                                                backgroundColor: ['#A6CAEC', '#407BFF'],
+                                                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                                                borderWidth: 1,
+                                            }
+                                        ]
                                     }}
-                                    options={barChartOptions} 
+                                    options={cascadeBarChartOptions} 
                                 />
                             </div>
                         )}
@@ -293,7 +294,7 @@ export default function Home() {
 
 
                         {selectedGroup === 'General' && selectedChart === 'Costs Breakdown' && (
-                            <div className="mt-4 w-full">
+                            <div className="mt-4 w-3/5">
                                 <h1 className="text-3xl text-white text-center">Costs for {selectedMonth}</h1> {/* Centered text */}
                                 <Doughnut 
                                     data={{
