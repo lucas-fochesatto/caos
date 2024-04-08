@@ -3,6 +3,7 @@ import cF from '../assets/cashFlow.png';
 import img2 from '../assets/img2.png';
 import img3 from '../assets/img3.png';
 import { GetAccountResult } from '../types/account';
+import { SDKState } from '@metamask/sdk-react-ui';
 
 
 

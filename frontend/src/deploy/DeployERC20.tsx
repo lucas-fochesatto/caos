@@ -8,7 +8,6 @@ export default async function DeployERC20(provider, signer) {
 
     const factory = new ethers.ContractFactory(abi, bytecode, signer)
     const token = await factory.deploy("MyToken", "TKN", 1000);
-    await token.waitForDeployment(); 
-    console.log("Token deployed to:", token.target);
-
+    const tx = await token.deployTransaction.wait();
+    console.log("Token deployed to:", tx.contractAddress);
 }
