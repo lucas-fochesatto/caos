@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import ManagerOwnersInfo from './pages/ManagerOwnersInfo'
 import ManagerOverview from './pages/ManagerOverview'
 import ManagerReports from './pages/ManagerReports'
+import Dashboards from './pages/Dashboards'
 
 import {useSDK} from "@metamask/sdk-react-ui";
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="/reports" element={<Reports account={account} />} />
           <Route path="/requests" element={<Requests account={account} />} />
           <Route path="/events" element={<Events account={account} />} />
+          <Route path="/dashboards" element={<Dashboards account={account} />} />
           <Route path="/manager" element={<ManagerLogin account={account} />} />
           <Route path="/manager/signup/1" element={<ManagerWalletConnect account={account} />} />
           <Route path="/manager/signup/2" element={<ManagerBuildingInfo info={manager} account={account} />} />
