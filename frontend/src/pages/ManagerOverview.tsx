@@ -10,43 +10,44 @@ import { SDKState } from "@metamask/sdk-react-ui";
 
 export default function Home({account, resident} : {account:SDKState; resident: any}) {
     const navigate = useNavigate()
+
+    const dburl = 'http://localhost:8080/'
+        // const dburl = 'https://caosdatabase.onrender.com/'
     
     const [buildingName, setBuildingName] = useState<string>("")
     const [property, setProperty] = useState(null)
     const [residents, setResidents] = useState(null)
+
+    const getPropertyResidents = async () => {
+        const options = {
+            method: 'GET',
+            mode: 'cors'
+        }
+        const propID = property.propertyID
+        const send = await fetch(dburl + `Residents/property/${propID}`, options)
+        const residents = await send.json()
+        console.log(residents)
+        setResidents(residents)
+    } 
     
+    const checkDatabase = async () => {
+        const options = {
+            method: 'GET',
+            mode: 'cors'
+        }
+        const managerID = resident.loggedInResident.managerID
+        const send = await fetch(dburl + `Properties/manager/${managerID}`, options)
+        const property = await send.json()
+        console.log(property)
+        setProperty(property)
+        setBuildingName(property.propertyName)
+    }
+
     // Check if user is logged in:
     useEffect(() => {
-        const dburl = 'http://localhost:8080/'
-        // const dburl = 'https://caosdatabase.onrender.com/'
-
         if(!account.connected) {
-            navigate('/manager')
+            navigate('/login')
         }
-
-        const checkDatabase = async () => {
-            const options = {
-                method: 'GET',
-                mode: 'cors'
-            }
-            const managerID = resident.loggedInResident.managerID
-            const send = await fetch(dburl + `Properties/manager/${managerID}`, options)
-            const property = await send.json()
-            setProperty(property)
-            setBuildingName(property.propertyName)
-        }
-
-        const getPropertyResidents = async () => {
-            const options = {
-                method: 'GET',
-                mode: 'cors'
-            }
-            const propID = property.propertyID
-            const send = await fetch(dburl + `Residents/property/${propID}`, options)
-            const residents = await send.json()
-            console.log(residents)
-            setResidents(residents)
-        } 
 
         checkDatabase()
         getPropertyResidents()
@@ -54,14 +55,16 @@ export default function Home({account, resident} : {account:SDKState; resident: 
 
     const data = [];
 
-    for(let i = 0; i < residents.length; i++) {
-        const wallet = residents[i].wallet.toLowerCase()
-        const newEntry = { 
-            apartment: i, 
-            resident: wallet.slice(0, 8) + '...' + wallet.slice(35, 42),
-            status: "not paid"
+    if(residents) {
+        for(let i = 0; i < residents.length; i++) {
+            const wallet = residents[i].wallet.toLowerCase()
+            const newEntry = { 
+                apartment: i, 
+                resident: wallet.slice(0, 8) + '...' + wallet.slice(35, 42),
+                status: "not paid"
+            }
+            data.push(newEntry)
         }
-        data.push(newEntry)
     }
     
     return (
@@ -99,7 +102,10 @@ export default function Home({account, resident} : {account:SDKState; resident: 
                             ))}
                         </tbody>
                     </table>
-                    <button className='mt-10 px-4 py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Add a new resident</button>
+                    <div className="flex gap-10 items-center justify-center">
+                        <button className='mt-10 px-4 py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Add a new resident</button>
+                        <button onClick={getPropertyResidents} className='mt-10 px-4 py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Refresh results</button>
+                    </div>
                 </div>
             </div>
         </>

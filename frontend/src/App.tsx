@@ -49,12 +49,12 @@ function App() {
         <Route path="/" element={<Layout resident={resident} account={account}/>}>
           <Route path="/" element={<Home account={account} />} />
           <Route path="/login" element={<Login resident={resident} account={account} />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp resident={resident}/>} />
           <Route path="/overview" element={<Overview resident={resident} account={account} />} />
           <Route path="/reports" element={<Reports account={account} />} />
           <Route path="/requests" element={<Requests account={account} />} />
           <Route path="/events" element={<Events account={account} />} />
-          <Route path="/dashboards" element={<Dashboards account={account} />} />
+          <Route path="/dashboards" element={<Dashboards />} />
           <Route path="/manager" element={<ManagerLogin account={account} />} />
           <Route path="/manager/signup/1" element={<ManagerWalletConnect account={account} />} />
           <Route path="/manager/signup/2" element={<ManagerBuildingInfo info={manager} account={account} />} />
