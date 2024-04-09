@@ -23,7 +23,6 @@ import {useSDK} from "@metamask/sdk-react-ui";
 function App() {
   const account = useSDK()
 
-  
   const [manager, setManager] = useState<ManagerSignupInfo | null>(null);
 
   const [resident, setRedisent] = useState<any>(null)
@@ -35,7 +34,9 @@ function App() {
       residents: []
     }
     const loggedIn = {
-      loggedInResident: null
+      loggedInResident: null,
+      exists: false,
+      isManager: false
     }
 
     setRedisent(loggedIn)
@@ -45,7 +46,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout account={account}/>}>
+        <Route path="/" element={<Layout resident={resident} account={account}/>}>
           <Route path="/" element={<Home account={account} />} />
           <Route path="/login" element={<Login resident={resident} account={account} />} />
           <Route path="/signup" element={<SignUp />} />
@@ -58,7 +59,7 @@ function App() {
           <Route path="/manager/signup/1" element={<ManagerWalletConnect account={account} />} />
           <Route path="/manager/signup/2" element={<ManagerBuildingInfo info={manager} account={account} />} />
           <Route path="/manager/signup/3" element={<ManagerOwnersInfo info={manager} account={account} />} />
-          <Route path="/manager/overview" element={<ManagerOverview account={account} />} />
+          <Route path="/manager/overview" element={<ManagerOverview resident={resident} account={account} />} />
           <Route path="/manager/reports" element={<ManagerReports account={account} />} />
         </Route>
       </Routes>

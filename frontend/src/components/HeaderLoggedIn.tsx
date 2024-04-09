@@ -6,7 +6,7 @@ import './Header.css';
 import { MetaMaskButton } from '@metamask/sdk-react-ui';
 
 // Defining the Header component responsible for rendering the header section of the application
-export default function Header() {
+export default function Header({resident}: {resident: any}) {
     // Using the `useNavigate` hook to get the navigate function for routing
     const navigate = useNavigate();
 
@@ -30,6 +30,7 @@ export default function Header() {
                     <h1 className="text-white font-light">dao your building</h1>
                 </button>
                 {/* Navigation links */}
+                {resident.exists ? 
                 <nav>
                     {/* Unordered list of navigation links */}
                     <ul className="flex space-x-4 gap-8">
@@ -69,6 +70,8 @@ export default function Header() {
                         </li>
                     </ul>
                 </nav>
+                : ""
+                }
                 <MetaMaskButton/>
             </div>
         </header>

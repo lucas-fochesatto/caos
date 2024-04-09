@@ -1,6 +1,6 @@
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import '../wallet-button.css'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
@@ -8,29 +8,67 @@ import check from '../assets/checked-blue.svg';
 import { GetAccountResult } from "../types/account";
 import { SDKState } from "@metamask/sdk-react-ui";
 
-export default function Home({account} : {account:SDKState}) {
+export default function Home({account, resident} : {account:SDKState; resident: any}) {
     const navigate = useNavigate()
+    
+    const [buildingName, setBuildingName] = useState<string>("")
+    const [property, setProperty] = useState(null)
+    const [residents, setResidents] = useState(null)
     
     // Check if user is logged in:
     useEffect(() => {
+        const dburl = 'http://localhost:8080/'
+        // const dburl = 'https://caosdatabase.onrender.com/'
+
         if(!account.connected) {
             navigate('/manager')
         }
+
+        const checkDatabase = async () => {
+            const options = {
+                method: 'GET',
+                mode: 'cors'
+            }
+            const managerID = resident.loggedInResident.managerID
+            const send = await fetch(dburl + `Properties/manager/${managerID}`, options)
+            const property = await send.json()
+            setProperty(property)
+            setBuildingName(property.propertyName)
+        }
+
+        const getPropertyResidents = async () => {
+            const options = {
+                method: 'GET',
+                mode: 'cors'
+            }
+            const propID = property.propertyID
+            const send = await fetch(dburl + `Residents/property/${propID}`, options)
+            const residents = await send.json()
+            console.log(residents)
+            setResidents(residents)
+        } 
+
+        checkDatabase()
+        getPropertyResidents()
     }, [account.connected])
-    
-    const data = [
-        { apartment: 1, resident: "0x1234567890abcdef", status: "paid" },
-        { apartment: 2, resident: "0xabcdef1234567890", status: "not paid" },
-        { apartment: 3, resident: "0x9876543210fedcba", status: "paid" },
-        { apartment: 4, resident: "0xfedcba0987654321", status: "not paid" },
-        { apartment: 5, resident: "0x13579ace2468bdf", status: "paid" },
-      ];
+
+    const data = [];
+
+    for(let i = 0; i < residents.length; i++) {
+        const wallet = residents[i].wallet.toLowerCase()
+        const newEntry = { 
+            apartment: i, 
+            resident: wallet.slice(0, 8) + '...' + wallet.slice(35, 42),
+            status: "not paid"
+        }
+        data.push(newEntry)
+    }
     
     return (
         <>
-            <div className="py-12 px-24 items-left flex justify-between">
+            <div className="py-12 px-24 flex">
                 <div className="w-[40vw]">
-                    <h1 className="py-2 text-5xl font-bold mb-12 text-white text-left">Building Name</h1> {/* Centered text */}
+                    <h1 className="py-2 text-5xl font-bold mb-12 text-white text-left">{buildingName}</h1> {/* Centered text */}
                     <h1 className="text-4xl mb-16 text-white text-left">Welcome, dear manager!</h1> {/* Centered text */}
                     <p className="text-3xl mb-8 ml-12 text-white text-left">Token balance: <span className='text-[#407BFF]'>tokenBalance</span></p>
                     <div className="flex items-center gap-5 ">

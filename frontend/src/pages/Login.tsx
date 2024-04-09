@@ -10,7 +10,7 @@ export default function Login({account, resident} : {account:SDKState; resident:
     
 
     useEffect(() => {
-        const checkDatabase = async () => {
+        const checkRDatabase = async () => {
             let exists = false
             // const dburl = 'http://localhost:8080/'
             const dburl = 'https://caosdatabase.onrender.com/'
@@ -26,6 +26,7 @@ export default function Login({account, resident} : {account:SDKState; resident:
                     console.log('ENTREI')
                     navigate('/overview')
                     resident.loggedInResident = _resident
+                    resident.exists = true
                     exists = true
                     break
                 }
@@ -33,6 +34,28 @@ export default function Login({account, resident} : {account:SDKState; resident:
 
             if(!exists) {
                 navigate('/signup')
+            }
+        }
+
+        const checkMDatabase = async () => {
+            // const dburl = 'http://localhost:8080/'
+            const dburl = 'https://caosdatabase.onrender.com/'
+            const options = {
+                method: 'GET',
+                mode: 'cors'
+            }
+            const send = await fetch(dburl + 'Managers', options)
+            const managers = await send.json()
+            const walletAddress = wallet.address.toString()
+            for(const _manager of managers) {
+                if(walletAddress.toUpperCase() == _manager.wallet.toUpperCase()) {
+                    console.log("YOU ARE MANAGER!")
+                    resident.loggedInResident = _manager
+                    resident.isManager = true
+                    resident.exists = true
+                    navigate('/manager/overview')
+                    break
+                }
             }
         }
 
@@ -83,7 +106,10 @@ export default function Login({account, resident} : {account:SDKState; resident:
         }
 
         if(wallet.address) {
-            checkDatabase()
+            checkMDatabase()
+            if(!resident.isManager) {
+                checkRDatabase()
+            }
         }
     }, [account.connected, wallet.address])
     
