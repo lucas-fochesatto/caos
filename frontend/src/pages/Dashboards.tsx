@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import { Chart as chartjs, LinearScale } from 'chart.js/auto';
-import { Bar, Line, Doughnut } from 'react-chartjs-2';
-import { SDKState } from "@metamask/sdk-react-ui";
+import { Line, Doughnut } from 'react-chartjs-2';
+import { Chart as chartjs, LinearScale, registerables } from 'chart.js/auto';
+import 'chartjs-plugin-datalabels';
 
 // Register Chart.js modules
 chartjs.register(...registerables);
 
 export default function Home() {
-    const [selectedChart, setSelectedChart] = useState('Monthly Analysis');
-    const [selectedGroup, setSelectedGroup] = useState('General');
     const [selectedMonth, setSelectedMonth] = useState('January');
 
     const calculateCumulativeSum = (array) => {
