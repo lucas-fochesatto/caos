@@ -4,9 +4,11 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { MetaMaskButton, SDKState, useAccount} from "@metamask/sdk-react-ui";
 
-export default function Login({account} : {account:SDKState}) {
+export default function Login({account, resident} : {account:SDKState; resident:any}) {
     const navigate = useNavigate()
     const wallet = useAccount()
+
+
 
     useEffect(() => {
         const checkDatabase = async () => {
@@ -20,14 +22,18 @@ export default function Login({account} : {account:SDKState}) {
             const send = await fetch(dburl + 'Residents', options)
             const residents = await send.json()
             const walletAddress = wallet.address.toString()
-            for(const resident of residents) {
-                console.log(resident.wallet.toString())
-                if(walletAddress.startsWith(resident.wallet)) {
+            for(const _resident of residents) {
+                if(walletAddress.toUpperCase() == _resident.wallet.toUpperCase()) {
                     console.log('ENTREI')
                     navigate('/overview')
+                    resident.loggedInResident = _resident
                     exists = true
                     break
                 }
+            }
+
+            if(!exists) {
+                navigate('/signup')
             }
         }
 

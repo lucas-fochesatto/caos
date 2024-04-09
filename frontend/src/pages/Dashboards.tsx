@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Chart as chartjs, LinearScale } from 'chart.js/auto';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
+import { SDKState } from "@metamask/sdk-react-ui";
 
 chartjs.register(LinearScale);
 
-export default function Home() {
+export default function Dashboards({account} : {account:SDKState}) {
     const [selectedChart, setSelectedChart] = useState('Monthly Analysis');
     const [selectedGroup, setSelectedGroup] = useState('General');
     const [selectedMonth, setSelectedMonth] = useState('January');
