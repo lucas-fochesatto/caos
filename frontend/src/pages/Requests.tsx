@@ -24,7 +24,7 @@ export default function Requests({account} : {account:SDKState}) {
                         <div className='flex justify-between '> 
                             <div className='flex gap-14 items-center'>
                                 <img src={info} alt="" className='w-[40px]' />
-                                <p className='text-white '>Orcas are not whales</p>    
+                                <p className='text-white '>Fix the hall's lights</p>    
                             </div>
                             <div className='flex gap-x-3'>
                                 <button className='px-6 py-2 rounded text-white bg-[#FB5E4D] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300'>Vote against</button>

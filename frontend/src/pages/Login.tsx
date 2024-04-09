@@ -2,17 +2,36 @@ import '../wallet-button.css'
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { MetaMaskButton, SDKState} from "@metamask/sdk-react-ui";
+import { MetaMaskButton, SDKState, useAccount} from "@metamask/sdk-react-ui";
 
 export default function Login({account} : {account:SDKState}) {
     const navigate = useNavigate()
+    const wallet = useAccount()
 
     useEffect(() => {
-        if(account.connected)  {
-            const checkDatabase = async () => {
-                
+        const checkDatabase = async () => {
+            let exists = false
+            const dburl = 'http://localhost:8080/'
+            // const dburl = 'https://caosdatabase.onrender.com/'
+            const options = {
+                method: 'GET',
+                mode: 'cors'
             }
+            const send = await fetch(dburl + 'Residents', options)
+            const residents = await send.json()
+            const walletAddress = wallet.address.toString()
+            for(const resident of residents) {
+                console.log(resident.wallet.toString())
+                if(walletAddress.startsWith(resident.wallet)) {
+                    console.log('ENTREI')
+                    navigate('/overview')
+                    exists = true
+                    break
+                }
+            }
+        }
 
+        if(account.connected)  {
             const checkChain = async () => {
                 const chainId = await window.ethereum.request({ method: "eth_chainId"})
                 if(chainId != "0xe9ac0ce") {
@@ -46,21 +65,22 @@ export default function Login({account} : {account:SDKState}) {
                                         ],
                                     });
 
-                                    navigate('/overview')
+                                    // navigate('/overview')
                             } catch (addError) {
                                 // Handle "add" error.
                             }
                         }
                         // Handle other "switch" errors.
                     }
-                } else {
-                    navigate('/overview')
                 }
             }
-
             checkChain()
         }
-    }, [account.connected])
+
+        if(wallet.address) {
+            checkDatabase()
+        }
+    }, [account.connected, wallet.address])
     
     return (
         <>

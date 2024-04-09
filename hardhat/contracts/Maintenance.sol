@@ -20,26 +20,31 @@ contract Maintenance {
         address residentWallet;
         string description;
         uint256 costInUsd;
+        uint256 priorityOrder;
         bool paid;
     }
 
     MaintenanceRequest[] public maintenanceRequest;
     mapping(address => uint256) public addressToAmountPayed;
-    mapping(address => bool) public hasPaid;
+    mapping(address => bool) public inDebt;
 
-    function addRequest (string memory _name, uint256 _apartment, address _residentWallet, string memory _description, uint256 _costInUsd) public {
+    function addRequest (string memory _name, uint256 _apartment, address _residentWallet, string memory _description, uint256 _costInUsd, uint256 _priorityOrder) public {
+        require(_priorityOrder >= 0 && _priorityOrder <= 2, "Priority must be between 0 and 2");
         bool found = false;
         for(uint256 i = 0; i < maintenanceRequest.length; i++) {
             if (maintenanceRequest[i].residentWallet == _residentWallet) {
                 maintenanceRequest[i].costInUsd += _costInUsd;
                 maintenanceRequest[i].description = string(abi.encodePacked(maintenanceRequest[i].description, ", ", _description));
+                if(_priorityOrder > maintenanceRequest[i].priorityOrder) {
+                    maintenanceRequest[i].priorityOrder = _priorityOrder;
+                }
                 found = true;
                 break;
             }
         }
         if(!found){
-            maintenanceRequest.push(MaintenanceRequest(_name, _apartment,  _residentWallet, _description, _costInUsd, false));
-            hasPaid[_residentWallet] = false;
+            maintenanceRequest.push(MaintenanceRequest(_name, _apartment,  _residentWallet, _description, _costInUsd, _priorityOrder, false));
+            inDebt[_residentWallet] = true;
         }
     }
 
@@ -54,9 +59,9 @@ contract Maintenance {
 
     function pay() public payable {
         uint256 amountDue = getMaintenanceCostByAddress(msg.sender);
-        require(msg.value.getConversionRate() >= amountDue, "Didn't send enough!");
+        require(msg.value.getConversionRate() >= amountDue * 1e18, "Didn't send enough!");
         addressToAmountPayed[msg.sender] = msg.value;
-        hasPaid[msg.sender] = false;
+        inDebt[msg.sender] = false;
         for (uint256 i = 0; i < maintenanceRequest.length; i++){
             if(maintenanceRequest[i].residentWallet == msg.sender){
                 maintenanceRequest[i].paid = true;
@@ -88,6 +93,28 @@ contract Maintenance {
                 i++;
             }
         }
+    }
+
+    function getMaxPriority() public view returns (address) {
+        uint256 maxPriority = 0;
+        require(maintenanceRequest.length > 0, "No requests");
+        address wallet = maintenanceRequest[0].residentWallet;
+        
+        for (uint256 i = maintenanceRequest.length; i > 0; i--) {
+            if (maxPriority <= maintenanceRequest[i - 1].priorityOrder) {
+                maxPriority = maintenanceRequest[i - 1].priorityOrder;
+                wallet = maintenanceRequest[i - 1].residentWallet;
+            }
+        }
+        return wallet;
+    }
+
+    function checkInDebt() public view returns (bool) {
+        return inDebt[msg.sender];
+    }
+
+    function amountPaid() public view returns (uint256) {
+        return addressToAmountPayed[msg.sender];
     }
 
     modifier onlyOwner {

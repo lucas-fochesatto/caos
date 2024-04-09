@@ -12,10 +12,7 @@ export default function Reports({account} : {account:SDKState}) {
             <div>
                 <img src={img4} alt="" />
             </div>
-            <div className="flex flex-row items-baseline">
-                <div className="flex items-end flex-grow w-[65vw] h-px bg-[#6D9EEB]"></div>
-                <button className="flex items-center p-2 text-white text-xl bg-[#6D9EEB]">New Entry</button>
-            </div>
+            <button className='mt-4 w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>New entry</button>
             <div>
                 <div className = "mt-4 p-2 px-4 bg-[#1055CC] w-[100vh] text-white text-left font-bold">
                     Reports on revenues, maintenance, services, contracts ands goals

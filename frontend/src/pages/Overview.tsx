@@ -8,6 +8,8 @@ import { SDKState } from '@metamask/sdk-react-ui';
 import OverviewTable from '../components/OverviewTable';
 import { Chart as chartjs, LinearScale } from 'chart.js/auto';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
+import cashLogo from '../assets/cashLogo.svg';
+import apartmentLogo from '../assets/apartmentLogo.svg';
 
 
 export default function Home({account} : {account:SDKState}) {
@@ -79,69 +81,84 @@ export default function Home({account} : {account:SDKState}) {
     
     return (
         <>
-            <div className="p-12 items-left flex justify-left flex-row gap-8">
-                <div>      
+            <div className="py-12 px-24 items-left flex justify-between">
+                <div className='w-[35vw]'>      
+                    <div className='mb-10'>
+                        <div className="mb-6">
+                            <select className="border border-gray-400 bg-gray-400 rounded bg-transparent text-white font-bold outline-0 px-4 py-2" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+                                <option className="text-black" value="January">January</option>
+                                <option className="text-black" value="February">February</option>
+                                <option className="text-black" value="March">March</option>
+                                <option className="text-black" value="April">April</option>
+                                <option className="text-black" value="May">May</option>
+                                <option className="text-black" value="July">July</option>
+                            </select>
+                        </div>
+
+                        
+                        <div className="mb-6 w-full">
+                            <h1 className="text-2xl mb-4 text-white text-center">Personal Expenses</h1> {/* Centered text */}
+                                <Bar 
+                                    data={{
+                                        labels: ['Rent', 'Maintenance', 'Total'],
+                                        datasets: [
+                                            {
+                                                label: '',
+                                                data: [0, PersonalExpensesData[selectedMonth].Rent, 0], // Original Rent value and 0 for Maintenance
+                                                backgroundColor: 'rgba(255, 99, 132, 0)',
+                                                borderColor: 'rgba(255, 99, 132, 0)',
+                                                borderWidth: 1,
+                                            },
+                                            {
+                                                label: 'Maintenance',
+                                                data: [0, PersonalExpensesData[selectedMonth].Maintenance, 0], // 0 for Original Rent and Maintenance value
+                                                backgroundColor: '#6D9EEB',
+                                                borderColor: '#6D9EEB',
+                                                borderWidth: 1,
+                                            },
+                                            {
+                                                label: 'Total',
+                                                data: [0, 0, PersonalExpensesData[selectedMonth].Total], // Original Rent value and 0 for Maintenance
+                                                backgroundColor: '#407BFF',
+                                                borderColor: '#407BFF',
+                                                borderWidth: 1,
+                                            },
+                                            {
+                                                label: 'Rent',
+                                                data: [PersonalExpensesData[selectedMonth].Rent, 0, 0], // First copy of Rent value and 0 for Maintenance
+                                                backgroundColor: '#6D9EEB', // Adjust transparency or color as needed
+                                                borderColor: '#6D9EEB',
+                                                borderWidth: 1,
+                                            },
+                                            {
+                                                label: '',
+                                                data: [PersonalExpensesData[selectedMonth].Rent, 0, 0], // Second copy of Rent value and 0 for Maintenance
+                                                backgroundColor: 'rgba(255, 99, 132, 0)', // Adjust transparency or color as needed
+                                                borderColor: 'rgba(255, 99, 132, 0)',
+                                                borderWidth: 1,
+                                            }
+                                        ]
+                                    }}
+                                    options={cascadeBarChartOptions} 
+                                />
+                        </div>
+                    </div>
                     <OverviewTable/>
                 </div>
-                <div className="mb-4">
-                    <label className="mr-2">Select Month:</label>
-                    <select className="text-black" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-                        <option value="January">January</option>
-                        <option value="February">February</option>
-                        <option value="March">March</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="July">July</option>
-                    </select>
+                <div className="w-[40vw] text-center">
+                    <h1 className="text-5xl font-bold mb-12 text-white text-center">Building Name</h1> {/* Centered text */}
+                    <h1 className="text-4xl mb-16 text-white text-center">Welcome, dear resident!</h1> {/* Centered text */}
+                    
+                    <div className="mt-[100px] flex gap-7 justify-center items-center">
+                        <img className='w-6' src={cashLogo} alt="" />
+                        <h1 className='text-4xl text-white'>Status: <span className='text-[#407BFF]'>hasPaid</span></h1>
+                        <button className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Pay rent</button>
+                    </div>
+                    <div className="mt-[40px] flex gap-7 justify-center items-center">
+                        <img className='w-12' src={apartmentLogo} alt="" />
+                        <h1 className='text-4xl text-white'>Apartment: <span className='text-[#407BFF]'>hasPaid</span></h1>
+                    </div>
                 </div>
-
-                
-                <div className="mb-4 w-full">
-                <h1 className="text-3xl text-white text-center">Personal Expenses for {selectedMonth}</h1> {/* Centered text */}
-                    <Bar 
-                        data={{
-                            labels: ['Rent', 'Maintenance', 'Total'],
-                            datasets: [
-                                {
-                                    label: 'Original Rent',
-                                    data: [0, PersonalExpensesData[selectedMonth].Rent, 0], // Original Rent value and 0 for Maintenance
-                                    backgroundColor: 'rgba(255, 99, 132, 0)',
-                                    borderColor: 'rgba(255, 99, 132, 0)',
-                                    borderWidth: 1,
-                                },
-                                {
-                                    label: 'Maintenance',
-                                    data: [0, PersonalExpensesData[selectedMonth].Maintenance, 0], // 0 for Original Rent and Maintenance value
-                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    borderWidth: 1,
-                                },
-                                {
-                                    label: 'Total',
-                                    data: [0, 0, PersonalExpensesData[selectedMonth].Total], // Original Rent value and 0 for Maintenance
-                                    backgroundColor: 'rgba(89, 255, 132, 0.2)',
-                                    borderColor: 'rgba(89, 255, 132, 1)',
-                                    borderWidth: 1,
-                                },
-                                {
-                                    label: 'Additional Rent Copy 1',
-                                    data: [PersonalExpensesData[selectedMonth].Rent, 0, 0], // First copy of Rent value and 0 for Maintenance
-                                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Adjust transparency or color as needed
-                                    borderColor: 'rgba(255, 99, 132, 1)',
-                                    borderWidth: 1,
-                                },
-                                {
-                                    label: 'Additional Rent Copy 2',
-                                    data: [PersonalExpensesData[selectedMonth].Rent, 0, 0], // Second copy of Rent value and 0 for Maintenance
-                                    backgroundColor: 'rgba(255, 99, 132, 0)', // Adjust transparency or color as needed
-                                    borderColor: 'rgba(255, 99, 132, 0)',
-                                    borderWidth: 1,
-                                }
-                            ]
-                        }}
-                        options={cascadeBarChartOptions} 
-                    />
-                </div>  
             </div>
         </>
     )
