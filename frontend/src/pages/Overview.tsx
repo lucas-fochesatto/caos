@@ -12,26 +12,38 @@ import cashLogo from '../assets/cashLogo.svg';
 import apartmentLogo from '../assets/apartmentLogo.svg';
 
 
-export default function Home({account} : {account:SDKState}) {
+export default function Home({account, resident} : {account:SDKState; resident:any}) {
     const navigate = useNavigate()
+
+    const [buildingName, setBuildingName] = useState<string>("")
     
     // Check if user is logged in:
     useEffect(() => {
+        // const dburl = 'http://localhost:8080/'
+        const dburl = 'https://caosdatabase.onrender.com/'
+
         if(!account.connected) {
             navigate('/login')
         }
+
+        const checkDatabase = async () => {
+            const options = {
+                method: 'GET',
+                mode: 'cors'
+            }
+            const propertyID = resident.loggedInResident.propertyID
+            const send = await fetch(dburl + `Properties/${propertyID}`, options)
+            const property = await send.json()
+
+            setBuildingName(property.propertyName)
+        }
+
+        checkDatabase()
     }, [account.connected])
     
     const [selectedMonth, setSelectedMonth] = useState('January');
 
-    {var revenue = 1000;
-     var btms = 50;
-     var elevator = 7;
-     var sauna = 100;
-     var apt = 105
-     var status = true;
-     var nmt = 120;
-    }
+
 
     const PersonalExpensesData = {
         January: {
@@ -146,7 +158,7 @@ export default function Home({account} : {account:SDKState}) {
                     <OverviewTable/>
                 </div>
                 <div className="w-[40vw] text-center">
-                    <h1 className="text-5xl font-bold mb-12 text-white text-center">Building Name</h1> {/* Centered text */}
+                    <h1 className="text-5xl font-bold mb-12 text-white text-center">{buildingName}</h1> {/* Centered text */}
                     <h1 className="text-4xl mb-16 text-white text-center">Welcome, dear resident!</h1> {/* Centered text */}
                     
                     <div className="mt-[100px] flex gap-7 justify-center items-center">

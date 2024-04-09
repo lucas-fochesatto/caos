@@ -26,12 +26,19 @@ function App() {
   
   const [manager, setManager] = useState<ManagerSignupInfo | null>(null);
 
+  const [resident, setRedisent] = useState<any>(null)
+ 
   useEffect(() => {
     const newManager : ManagerSignupInfo = {
       buldingName: "oi",
       numberUnits: 0,
       residents: []
-    } 
+    }
+    const loggedIn = {
+      loggedInResident: null
+    }
+
+    setRedisent(loggedIn)
     setManager(newManager)
   }, [])
 
@@ -40,9 +47,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout account={account}/>}>
           <Route path="/" element={<Home account={account} />} />
-          <Route path="/login" element={<Login account={account} />} />
+          <Route path="/login" element={<Login resident={resident} account={account} />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/overview" element={<Overview account={account} />} />
+          <Route path="/overview" element={<Overview resident={resident} account={account} />} />
           <Route path="/reports" element={<Reports account={account} />} />
           <Route path="/requests" element={<Requests account={account} />} />
           <Route path="/events" element={<Events account={account} />} />

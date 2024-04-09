@@ -62,8 +62,8 @@ export default function ManagerOwnersInfo({ info , account }: { info: ManagerSig
 
     const handleSubmit = async () => {
         if(info) {
-            const dburl = 'http://localhost:8080/'
-            // const dburl = 'https://caosdatabase.onrender.com/'
+            // const dburl = 'http://localhost:8080/'
+            const dburl = 'https://caosdatabase.onrender.com/'
             setSubmited(true)
             const newResident  = {
                 apartment: current,

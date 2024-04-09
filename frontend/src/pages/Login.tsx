@@ -4,15 +4,16 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { MetaMaskButton, SDKState, useAccount} from "@metamask/sdk-react-ui";
 
-export default function Login({account} : {account:SDKState}) {
+export default function Login({account, resident} : {account:SDKState; resident:any}) {
     const navigate = useNavigate()
     const wallet = useAccount()
+    
 
     useEffect(() => {
         const checkDatabase = async () => {
             let exists = false
-            const dburl = 'http://localhost:8080/'
-            // const dburl = 'https://caosdatabase.onrender.com/'
+            // const dburl = 'http://localhost:8080/'
+            const dburl = 'https://caosdatabase.onrender.com/'
             const options = {
                 method: 'GET',
                 mode: 'cors'
@@ -20,16 +21,18 @@ export default function Login({account} : {account:SDKState}) {
             const send = await fetch(dburl + 'Residents', options)
             const residents = await send.json()
             const walletAddress = wallet.address.toString()
-            for(const resident of residents) {
-                console.log(resident.wallet, resident.wallet.toString() == walletAddress)
-                if(walletAddress.toUpperCase() == resident.wallet.toUpperCase()) {
+            for(const _resident of residents) {
+                if(walletAddress.toUpperCase() == _resident.wallet.toUpperCase()) {
+                    console.log('ENTREI')
                     navigate('/overview')
+                    resident.loggedInResident = _resident
                     exists = true
                     break
                 }
-                if(!exists){
-                    navigate('/signup')
-                }
+            }
+
+            if(!exists) {
+                navigate('/signup')
             }
         }
 
