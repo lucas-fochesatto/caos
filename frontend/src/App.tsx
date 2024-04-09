@@ -19,6 +19,7 @@ import ManagerReports from './pages/ManagerReports'
 import Dashboards from './pages/Dashboards'
 
 import {useSDK} from "@metamask/sdk-react-ui";
+import Home2 from './pages/Home2'
 
 function App() {
   const account = useSDK()
@@ -47,7 +48,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout resident={resident} account={account}/>}>
-          <Route path="/" element={<Home account={account} />} />
+          <Route path="/" element={<Home2 account={account} />} />
           <Route path="/login" element={<Login resident={resident} account={account} />} />
           <Route path="/signup" element={<SignUp resident={resident}/>} />
           <Route path="/overview" element={<Overview resident={resident} account={account} />} />

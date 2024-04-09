@@ -27,7 +27,7 @@ export default function Header({resident}: {resident: any}) {
                         className="h-8" 
                     />
                     {/* Displaying the site name */}
-                    <h1 className="text-white font-light">dao your building</h1>
+                    <h1 className="text-white font-light">dao your property</h1>
                 </button>
                 {/* Navigation links */}
                 {resident.exists ? 

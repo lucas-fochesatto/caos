@@ -8,7 +8,7 @@ export default function Footer() {
                 alt="Logo" 
                 className="h-12" 
             />
-            <h1 className="text-white font-light">dao your building</h1>
+            <h1 className="text-white font-light">dao your property</h1>
         </footer>
     )
 }

@@ -28,7 +28,7 @@ export default function HeaderManager() {
                         className="h-8" 
                     />
                     {/* Displaying the site name */}
-                    <h1 className="text-white font-light">dao your building</h1>
+                    <h1 className="text-white font-light">dao your property</h1>
                 </button>
                 <nav>
                     {/* Unordered list of navigation links */}
