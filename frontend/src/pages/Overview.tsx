@@ -19,8 +19,8 @@ export default function Home({account, resident} : {account:SDKState; resident:a
     
     // Check if user is logged in:
     useEffect(() => {
-        const dburl = 'http://localhost:8080/'
-        // const dburl = 'https://caosdatabase.onrender.com/'
+        // const dburl = 'http://localhost:8080/'
+        const dburl = 'https://caosdatabase.onrender.com/'
 
         if(!account.connected) {
             navigate('/login')

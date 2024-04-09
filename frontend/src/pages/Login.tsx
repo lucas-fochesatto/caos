@@ -7,14 +7,13 @@ import { MetaMaskButton, SDKState, useAccount} from "@metamask/sdk-react-ui";
 export default function Login({account, resident} : {account:SDKState; resident:any}) {
     const navigate = useNavigate()
     const wallet = useAccount()
-
-
+    
 
     useEffect(() => {
         const checkDatabase = async () => {
             let exists = false
-            const dburl = 'http://localhost:8080/'
-            // const dburl = 'https://caosdatabase.onrender.com/'
+            // const dburl = 'http://localhost:8080/'
+            const dburl = 'https://caosdatabase.onrender.com/'
             const options = {
                 method: 'GET',
                 mode: 'cors'
