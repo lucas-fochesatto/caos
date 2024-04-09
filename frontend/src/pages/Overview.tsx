@@ -4,42 +4,75 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
-import { SDKState } from '@metamask/sdk-react-ui';
+import { SDKState, useAccount } from '@metamask/sdk-react-ui';
 import OverviewTable from '../components/OverviewTable';
 import { Chart as chartjs, LinearScale } from 'chart.js/auto';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import cashLogo from '../assets/cashLogo.svg';
 import apartmentLogo from '../assets/apartmentLogo.svg';
 
+import { ethers } from 'ethers';
+import { abi } from '../../artifacts/contracts/Rent.sol/Rent.json'
 
 export default function Home({account, resident} : {account:SDKState; resident:any}) {
     const navigate = useNavigate()
 
     const [buildingName, setBuildingName] = useState<string>("")
+    const [property, setProperty] = useState(null)
+
+    const [inDebt, setInDebt] = useState(false)
+    const [rentToPay, setRentToPay] = useState("")
+
+    const wallet = useAccount()
+
+    // const dburl = 'http://localhost:8080/'
+    const dburl = 'https://caosdatabase.onrender.com/'
+    
+    const checkDatabase = async () => {
+        const options = {
+            method: 'GET',
+            mode: 'cors'
+        }
+        const propertyID = resident.loggedInResident.propertyID
+        const send = await fetch(dburl + `Properties/${propertyID}`, options)
+        const property = await send.json()
+        
+        setProperty(property)
+        setBuildingName(property.propertyName)
+    }
+
+    const fetchContracts = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        await provider.send('eth_requestAccounts', [])
+        const signer = provider.getSigner()
+        
+        const RentContract = new ethers.Contract(property.Rent, abi, signer)
+        setInDebt(await RentContract.functions.checkInDebt())
+        setRentToPay((await RentContract.getRentValueByAddress(wallet.address)).toString())
+    }
+
+    const pay = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        await provider.send('eth_requestAccounts', [])
+        const signer = provider.getSigner()
+
+        const RentContract = new ethers.Contract(property.Rent, abi, signer)
+        const tx = await RentContract.rent({ value: ethers.utils.parseEther("0.1") })
+        console.log(tx)
+    }
     
     // Check if user is logged in:
     useEffect(() => {
-        // const dburl = 'http://localhost:8080/'
-        const dburl = 'https://caosdatabase.onrender.com/'
-
         if(!account.connected) {
             navigate('/login')
         }
 
-        const checkDatabase = async () => {
-            const options = {
-                method: 'GET',
-                mode: 'cors'
-            }
-            const propertyID = resident.loggedInResident.propertyID
-            const send = await fetch(dburl + `Properties/${propertyID}`, options)
-            const property = await send.json()
-
-            setBuildingName(property.propertyName)
+        if(property) {
+            fetchContracts()
         }
-
+ 
         checkDatabase()
-    }, [account.connected])
+    }, [account.connected, property])
     
     const [selectedMonth, setSelectedMonth] = useState('January');
 
@@ -161,14 +194,15 @@ export default function Home({account, resident} : {account:SDKState; resident:a
                     <h1 className="text-5xl font-bold mb-12 text-white text-center">{buildingName}</h1> {/* Centered text */}
                     <h1 className="text-4xl mb-16 text-white text-center">Welcome, dear resident!</h1> {/* Centered text */}
                     
-                    <div className="mt-[100px] flex gap-7 justify-center items-center">
+                    <div className="mt-[100px] flex gap-7 justify-left items-center">
                         <img className='w-6' src={cashLogo} alt="" />
-                        <h1 className='text-4xl text-white'>Status: <span className='text-[#407BFF]'>hasPaid</span></h1>
-                        <button className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 '>Pay rent</button>
+                        <h1 className='text-2xl text-white'>Status: <span className='text-[#407BFF]'>{!inDebt ? "Paid" : "Not Paid"}</span></h1>
+                        <h1 className='text-2xl text-white'>Rent: <span className='text-[#407BFF]'>${rentToPay}</span></h1>
+                        <button onClick={pay} className='w-[7vw] py-2 rounded text-white bg-[#6D9EEB] font-bold hover:bg-transparent hover:text-[#6D9EEB] hover:border-[#1155CC] hover:border ease-in-out duration-300 mx-[5vw]'>Pay rent</button>
                     </div>
-                    <div className="mt-[40px] flex gap-7 justify-center items-center">
+                    <div className="mt-[40px] flex gap-7 justify-left items-center">
                         <img className='w-12' src={apartmentLogo} alt="" />
-                        <h1 className='text-4xl text-white'>Apartment: <span className='text-[#407BFF]'>hasPaid</span></h1>
+                        <h1 className='text-4xl text-white'>Apartment: <span className='text-[#407BFF]'>105</span></h1>
                     </div>
                 </div>
             </div>

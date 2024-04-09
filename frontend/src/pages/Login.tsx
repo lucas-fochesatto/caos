@@ -123,7 +123,7 @@ export default function Login({account, resident} : {account:SDKState; resident:
                 <div className="mt-20 w-[45vw]">
                     <div className="flex justify-between">
                         <p className="text-white text-2xl">Are you a building administrator?</p>
-                        <a href="/manager" className="text-[#6D9EEB] text-2xl underline	">click here</a>
+                        <a href="/manager/signup/1" className="text-[#6D9EEB] text-2xl underline	">click here</a>
                     </div>
                     <div className="flex justify-between">
                         <p className="text-white text-2xl">New here?</p>

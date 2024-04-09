@@ -67,6 +67,14 @@ export default function HeaderManager() {
                                 Events
                             </button>
                         </li>
+                        <li>
+                            <button className="text-lg text-mainColor hover:text-secondColor"
+                                // Navigate to the About page when the button is clicked
+                                onClick={() => navigate('/dashboards')}
+                            >
+                                Dashboards
+                            </button>
+                        </li>
                     </ul>
                 </nav>
                 <MetaMaskButton/>
