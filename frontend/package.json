@@ -16,6 +16,7 @@
     "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/web3.js": "^1.91.3",
     "chart.js": "^4.4.2",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "ethers": "^5.7.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",

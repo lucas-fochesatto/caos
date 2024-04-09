@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Chart as chartjs, LinearScale } from 'chart.js/auto';
-import { Bar, Line, Doughnut } from 'react-chartjs-2';
+import { Line, Doughnut } from 'react-chartjs-2';
+import { Chart as chartjs, LinearScale, registerables } from 'chart.js/auto';
+import 'chartjs-plugin-datalabels';
 
-chartjs.register(LinearScale);
+// Register Chart.js modules
+chartjs.register(...registerables);
 
 export default function Home() {
-    const [selectedChart, setSelectedChart] = useState('Monthly Analysis');
-    const [selectedGroup, setSelectedGroup] = useState('General');
     const [selectedMonth, setSelectedMonth] = useState('January');
 
     const calculateCumulativeSum = (array) => {
@@ -23,20 +23,20 @@ export default function Home() {
         labels: ['January', 'February', 'March', 'April', 'May', 'July'],
         datasets: [
             {
-                label: 'Costs',
+                label: 'Expenses',
                 data: [200,100,440,210,250,260,220,150],
                 fill: true,
                 backgroundColor: 'rgba(255,0,0,0.2)',
                 borderColor: 'rgba(255,0,0,1)',
-                borderWidth: 1,
+                borderWidth: 2,
             },
             {
-                label: 'Total Stored',
+                label: 'Net Income',
                 data: [300, 200, 340, 240, 370, 320],
                 fill: true,
                 backgroundColor: 'rgba(0,0,255,0.2)',
                 borderColor: 'rgba(0,0,255,1)',
-                borderWidth: 1,
+                borderWidth: 2,
                 clip: false,
             },
         ],
@@ -46,12 +46,12 @@ export default function Home() {
         labels: ['January', 'February', 'March', 'April', 'May', 'July'],
         datasets: [
             {
-                label: 'Net Income',
+                label: 'Cash and cash equivalents - YTD',
                 data: calculateCumulativeSum([300/150, 200/150, 340/150, 240/150, 370/150, 320/150]),
                 fill: true,
                 backgroundColor: 'rgba(0,255,0,0.2)',
                 borderColor: 'rgba(0,255,0,1)',
-                borderWidth: 1,
+                borderWidth: 2,
                 clip: false,
             },
         ],
@@ -59,34 +59,34 @@ export default function Home() {
 
     const RequestsListData = {
         January: [
-            { name: 'Replace Shower', value: 50 },
-            { name: 'Fix Toilet', value: 125 },
-            { name: 'Install Water Fountains', value: 75 },
+            { name: 'Replace Shower', value: 50, 'situation': 'Urgent' },
+            { name: 'Fix Toilet', value: 125, 'situation': 'Solved' },
+            { name: 'Install Water Fountains', value: 75, 'situation': 'Pending'},
         ],
         February: [
-            { name: 'Repair Kitchen Sink', value: 60 },
-            { name: 'Paint Living Room', value: 100 },
-            { name: 'Replace Light Fixtures', value: 80 },
+            { name: 'Repair Kitchen Sink', value: 60, 'situation': 'Pending' },
+            { name: 'Paint Living Room', value: 100 , 'situation': 'Urgent'},
+            { name: 'Replace Light Fixtures', value: 80, 'situation': 'Urgent' },
         ],
         March: [
-            { name: 'Unclog Drains', value: 70 },
-            { name: 'Repair Garage Door', value: 110 },
-            { name: 'Install Ceiling Fans', value: 90 },
+            { name: 'Unclog Drains', value: 70, 'situation': 'Solved'},
+            { name: 'Repair Garage Door', value: 110, 'situation': 'Pending'},
+            { name: 'Install Ceiling Fans', value: 90, 'situation': 'Pending'},
         ],
         April: [
-            { name: 'Fix Leaky Faucet', value: 55 },
-            { name: 'Replace Carpet', value: 135 },
-            { name: 'Install Security System', value: 65 },
+            { name: 'Fix Leaky Faucet', value: 55, 'situation': 'Solved'},
+            { name: 'Replace Carpet', value: 135, 'situation': 'Urgent'},
+            { name: 'Install Security System', value: 65, 'situation': 'Pending'},
         ],
         May: [
-            { name: 'Paint Exterior Walls', value: 45 },
-            { name: 'Repair Roof Tiles', value: 120 },
-            { name: 'Replace Windows', value: 85 },
+            { name: 'Paint Exterior Walls', value: 45, 'situation': 'Pending'},
+            { name: 'Repair Roof Tiles', value: 120, 'situation': 'Urgent'},
+            { name: 'Replace Windows', value: 85, 'situation': 'Pending'},
         ],
         July: [
-            { name: 'Repair Fence', value: 75 },
-            { name: 'Install Solar Panels', value: 140 },
-            { name: 'Upgrade HVAC System', value: 95 },
+            { name: 'Repair Fence', value: 75, 'situation': 'Pending'},
+            { name: 'Install Solar Panels', value: 140, 'situation': 'Urgent'},
+            { name: 'Upgrade HVAC System', value: 95, 'situation': 'Pending'},
         ]
     };
     
@@ -132,7 +132,24 @@ export default function Home() {
                 display: true,
                 position: 'bottom',
             },
+            tooltip: {
+                enabled: true,
+            },
+            // Configure data labels
+            datalabels: {
+                display: true,
+                color: 'white',
+                font: {
+                    size: 16
+                },
+                formatter: (value, context) => context.chart.data.labels[context.dataIndex],
+            },
         },
+        layout: {
+            padding: {
+                bottom: 10,
+            }
+        }
     };
 
     const lineChartOptions = {
@@ -141,6 +158,8 @@ export default function Home() {
                 suggestedMin: 0,
             },
         },
+        maintainAspectRatio: false,
+        aspectRatio: 2,
     };
 
     const NetIncomeOptions = {
@@ -155,115 +174,65 @@ export default function Home() {
             },
         },
     };
-    
 
     return (
         <>
         <div className="flex items-center justify-center">
-            <div className="w-3/5"> {/* Added w-full class here */}
-                <div>
-                    <h1 className="text-3xl text-white">{selectedChart === 'Monthly Analysis' ? 'Monthly Analysis' : ''}</h1>
-                    <h1 className="text-3xl text-white">{selectedChart === 'Net Income' ? 'Net Income' : ''}</h1>
-                    <h1 className="text-3xl text-white">{selectedChart === 'Personal Expenses' ? 'Personal Expenses' : ''}</h1>
-                    <h1 className="text-3xl text-white">{selectedChart === 'Requests List' ? 'Requests List' : ''}</h1>
-                </div>
+            <div className="w-3/5"> 
                 <div className="text-white">
-                    <div className="mb-4">
-                        <button className="mr-2" onClick={() => setSelectedGroup('General')}>General</button>
-                        <button className="mr-2" onClick={() => setSelectedGroup('Personal')}>Personal</button>
-                    </div>
-                    <div className="mb-4">
-                        {selectedGroup === 'General' && (
-                            <>
-                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Monthly Analysis')}>Monthly Analysis</button>
-                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Net Income')}>Net Income</button>
-                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Costs Breakdown')}>Costs Breakdown</button>
-                                {selectedChart === 'Costs Breakdown' && (
-                                    <div className="mb-4">
-                                        <label className="mr-2">Select Month:</label>
-                                        <select className="text-black" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-                                            <option value="January">January</option>
-                                            <option value="February">February</option>
-                                            <option value="March">March</option>
-                                            <option value="April">April</option>
-                                            <option value="May">May</option>
-                                            <option value="July">July</option>
-                                        </select>
-                                    </div>
-                                )}
-                            </>
-                        )}
-                        {selectedGroup === 'Personal' && (
-                            <>
-                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Requests List')}>Requests List</button>
-                                <div className="mb-4">
-                                    <label className="mr-2">Select Month:</label>
-                                    <select className="text-black" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-                                        <option value="January">January</option>
-                                        <option value="February">February</option>
-                                        <option value="March">March</option>
-                                        <option value="April">April</option>
-                                        <option value="May">May</option>
-                                        <option value="July">July</option>
-                                    </select>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                    <div className="flex flex-cols w-full items-center justify-center"> {/* Updated alignment */}
-                        {selectedChart === 'Monthly Analysis' && (
+                    <div className="flex flex-row w-full justify-center items-center mb-4">
+                        <div className="w-3/5 h-[35vh]">
                             <Line 
                                 data={MonthlyExpensesData}
                                 options={lineChartOptions}
                             />
-                        )}
-                        {selectedChart === 'Net Income' && (
-                            <Line 
-                                data={TotalStoredData}
-                                options={NetIncomeOptions}
-                            />
-                        )}
-                        {selectedChart === 'Requests List' && (
-                            <div className="mb-4 w-1/2">
-                                <h1 className="text-3xl text-white text-center">Requests List for {selectedMonth}</h1> {/* Centered text */}
-                                <table style={{ width: '100%' }}>
+                        </div>
+                        <div className="w-full md:w-1/2 md:ml-2">
+                            <div className="mb-4">
+                                <h1 className="text-3xl text-white text-center">Requests List for {selectedMonth}</h1> 
+                                <table className='justify-around' style={{ width: '100%' }}>
                                     <thead>
-                                        <tr className="text-2xl flex justify-between bg-blue-700 mb-1">
+                                        <tr className="text-2xl mb-1">
                                             <th>Request</th>
-                                            <th>Value</th>
+                                            <th>$</th>
+                                            <th>Situation</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {RequestsListData[selectedMonth].map((request, index) => (
-                                            <tr key={index} className={`text-2xl flex justify-between border border-emerald-500 ${index % 2 === 0 ? 'bg-gray-400' : 'bg-[#6D9EEB]'}`}>
+                                            <tr key={index} className={`text-2xl border-y-2 border-white gap-2`}>
                                                 <td>{request.name}</td>
                                                 <td>{request.value}</td>
+                                                <td className={`${request.situation == "Urgent" ? "text-red-700" : (request.situation == "Solved" ? "text-green-700" : "text-yellow-400")}`}>{request.situation}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
-                        )}
-
-
-                        {selectedGroup === 'General' && selectedChart === 'Costs Breakdown' && (
-                            <div className="mt-4 w-3/5">
-                                <h1 className="text-3xl text-white text-center">Costs for {selectedMonth}</h1> {/* Centered text */}
-                                <Doughnut 
-                                    data={{
-                                        labels: Object.keys(CostsBreakdownData[selectedMonth]),
-                                        datasets: [{
-                                            label: `Costs Breakdown for ${selectedMonth}`,
-                                            data: Object.values(CostsBreakdownData[selectedMonth]),
-                                            backgroundColor: ['#6D9EEB', '#1055CC', '#1C4587'],
-                                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-                                            borderWidth: 1,
-                                        }]
-                                    }} 
-                                    options={doughnutChartOptions} 
-                                />
-                            </div>
-                        )}
+                        </div>
+                    </div>
+                    <div className="flex flex-row w-full justify-center items-center mb-4">
+                        <div className="w-3/5">
+                            <Line 
+                                data={TotalStoredData}
+                                options={NetIncomeOptions}
+                            />
+                        </div>
+                        <div className="w-2/5">
+                            <Doughnut 
+                                data={{
+                                    labels: Object.keys(CostsBreakdownData[selectedMonth]),
+                                    datasets: [{
+                                        label: `Costs Breakdown for ${selectedMonth}`,
+                                        data: Object.values(CostsBreakdownData[selectedMonth]),
+                                        backgroundColor: ['#6D9EEB', '#1055CC', '#1C4587'],
+                                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                                        borderWidth: 2,
+                                    }]
+                                }} 
+                                options={doughnutChartOptions} 
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
