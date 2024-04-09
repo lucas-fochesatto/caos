@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import info from '../assets/infoLogo.svg';
-import img4 from '../assets/img4.png';
+import img4 from '../assets/img4.jpg';
 import { GetAccountResult } from '../types/account';
 import { useState } from 'react';
 

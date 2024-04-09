@@ -47,8 +47,8 @@ export default function Dashboards({account} : {account:SDKState}) {
         labels: ['January', 'February', 'March', 'April', 'May', 'July'],
         datasets: [
             {
-                label: 'Total Stored',
-                data: calculateCumulativeSum([300, 200, 340, 240, 370, 320]),
+                label: 'Net Income',
+                data: calculateCumulativeSum([300/150, 200/150, 340/150, 240/150, 370/150, 320/150]),
                 fill: true,
                 backgroundColor: 'rgba(0,255,0,0.2)',
                 borderColor: 'rgba(0,255,0,1)',
@@ -144,6 +144,18 @@ export default function Dashboards({account} : {account:SDKState}) {
         },
     };
 
+    const NetIncomeOptions = {
+        scales: {
+            y: {
+                suggestedMin: 0,
+                ticks: {
+                    callback: function(value) {
+                        return value + '%';
+                    }
+                }
+            },
+        },
+    };
     
 
     return (
@@ -152,7 +164,7 @@ export default function Dashboards({account} : {account:SDKState}) {
             <div className="w-3/5"> {/* Added w-full class here */}
                 <div>
                     <h1 className="text-3xl text-white">{selectedChart === 'Monthly Analysis' ? 'Monthly Analysis' : ''}</h1>
-                    <h1 className="text-3xl text-white">{selectedChart === 'Total Stored' ? 'Total Stored' : ''}</h1>
+                    <h1 className="text-3xl text-white">{selectedChart === 'Net Income' ? 'Net Income' : ''}</h1>
                     <h1 className="text-3xl text-white">{selectedChart === 'Personal Expenses' ? 'Personal Expenses' : ''}</h1>
                     <h1 className="text-3xl text-white">{selectedChart === 'Requests List' ? 'Requests List' : ''}</h1>
                 </div>
@@ -165,7 +177,7 @@ export default function Dashboards({account} : {account:SDKState}) {
                         {selectedGroup === 'General' && (
                             <>
                                 <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Monthly Analysis')}>Monthly Analysis</button>
-                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Total Stored')}>Total Stored</button>
+                                <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Net Income')}>Net Income</button>
                                 <button className="mr-2 bg-[#1155CC] border border-white" onClick={() => setSelectedChart('Costs Breakdown')}>Costs Breakdown</button>
                                 {selectedChart === 'Costs Breakdown' && (
                                     <div className="mb-4">
@@ -206,10 +218,10 @@ export default function Dashboards({account} : {account:SDKState}) {
                                 options={lineChartOptions}
                             />
                         )}
-                        {selectedChart === 'Total Stored' && (
+                        {selectedChart === 'Net Income' && (
                             <Line 
                                 data={TotalStoredData}
-                                options={lineChartOptions}
+                                options={NetIncomeOptions}
                             />
                         )}
                         {selectedChart === 'Requests List' && (
@@ -244,7 +256,7 @@ export default function Dashboards({account} : {account:SDKState}) {
                                         datasets: [{
                                             label: `Costs Breakdown for ${selectedMonth}`,
                                             data: Object.values(CostsBreakdownData[selectedMonth]),
-                                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(255, 206, 86, 0.2)'],
+                                            backgroundColor: ['#6D9EEB', '#1055CC', '#1C4587'],
                                             borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
                                             borderWidth: 1,
                                         }]
