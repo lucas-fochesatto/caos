@@ -11,8 +11,8 @@ import { SDKState } from "@metamask/sdk-react-ui";
 export default function Home({account, resident} : {account:SDKState; resident: any}) {
     const navigate = useNavigate()
 
-    const dburl = 'http://localhost:8080/'
-        // const dburl = 'https://caosdatabase.onrender.com/'
+    // const dburl = 'http://localhost:8080/'
+    const dburl = 'https://caosdatabase.onrender.com/'
     
     const [buildingName, setBuildingName] = useState<string>("")
     const [property, setProperty] = useState(null)
