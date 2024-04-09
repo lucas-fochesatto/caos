@@ -1,8 +1,14 @@
 CREATE DATABASE Orca_db;
 use Orca_db;
 
+CREATE TABLE Managers (
+    managerID INT AUTO_INCREMENT PRIMARY KEY,
+    wallet VARCHAR(255) NOT NULL,
+);
+
 CREATE TABLE Properties (
     propertyID INT AUTO_INCREMENT PRIMARY KEY,
+    propertyName VARCHAR(255) NOT NULL,
     Rent VARCHAR(255) NOT NULL,
     Bills VARCHAR(255) NOT NULL,
     Maintenance VARCHAR(255) NOT NULL,
@@ -12,14 +18,11 @@ CREATE TABLE Properties (
     FOREIGN KEY(managerID) REFERENCES Managers(managerID)
 );
 
-CREATE TABLE Resident (
+CREATE TABLE Residents (
     residentID INT AUTO_INCREMENT PRIMARY KEY,
+    propertyID INT NOT NULL,
+    FOREIGN KEY(propertyID) REFERENCES Properties(propertyID)
     wallet VARCHAR(255) NOT NULL, 
-);
-
-CREATE TABLE Managers (
-    managerID INT AUTO_INCREMENT PRIMARY KEY,
-    wallet VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE ResidentsTransactions (
@@ -27,7 +30,7 @@ CREATE TABLE ResidentsTransactions (
     type VARCHAR(255) NOT NULL,
     value INT NOT NULL,
     residentID INT NOT NULL,
-    FOREIGN KEY(residentID) REFERENCES Resident(residentID),
+    FOREIGN KEY(residentID) REFERENCES Residents(residentID),
     date TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -36,6 +39,6 @@ CREATE TABLE PropertyTransactions (
     type VARCHAR(255) NOT NULL,
     value INT NOT NULL,
     propertytID INT NOT NULL,
-    FOREIGN KEY(propertID) REFERENCES Properties(propertID),
+    FOREIGN KEY(propertytID) REFERENCES Properties(propertytID),
     date TIMESTAMP NOT NULL DEFAULT NOW()
 );

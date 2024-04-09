@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import info from '../assets/infoLogo.svg';
-import img4 from '../assets/img4.png';
+import img4 from '../assets/img4.jpg';
 import { useState } from 'react';
 import { GetAccountResult } from '../types/account';
 
@@ -12,7 +12,7 @@ export default function Requests({account} : {account:SDKState}) {
     return (
         <>
             <div className="items-center flex justify-center flex-col ">
-                <div>
+                <div className='w-full flex justify-center'>
                     <img src={img4} alt="" />
                 </div>
                 <div>

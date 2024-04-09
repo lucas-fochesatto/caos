@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import pdf from '../assets/pdf.svg';
-import img4 from '../assets/img4.png';
+import img4 from '../assets/img4.jpg';
 import { GetAccountResult } from '../types/account';
 
 export default function Reports({account} : {account:SDKState}) {

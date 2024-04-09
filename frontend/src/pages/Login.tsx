@@ -21,12 +21,14 @@ export default function Login({account} : {account:SDKState}) {
             const residents = await send.json()
             const walletAddress = wallet.address.toString()
             for(const resident of residents) {
-                console.log(resident.wallet.toString())
-                if(walletAddress.startsWith(resident.wallet)) {
-                    console.log('ENTREI')
+                console.log(resident.wallet, resident.wallet.toString() == walletAddress)
+                if(walletAddress.toUpperCase() == resident.wallet.toUpperCase()) {
                     navigate('/overview')
                     exists = true
                     break
+                }
+                if(!exists){
+                    navigate('/signup')
                 }
             }
         }

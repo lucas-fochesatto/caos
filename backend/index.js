@@ -1,6 +1,7 @@
 import express from 'express'
 import * as db from './database.js'
 import cors from 'cors'
+import { verify } from './verify.js'
 
 const app = express()
 
@@ -36,8 +37,8 @@ app.get('/Properties/:id', async (req, res) => {
 })
 
 app.post('/addProperty', async (req, res) => {
-    const { Rent, Bills, Maintenance, Events, ERC, managerID } = req.body
-    const Property  = await db.addProperty(Rent, Bills, Maintenance, Events, ERC, managerID)
+    const { propertyName, Rent, Bills, Maintenance, Event, ERC, managerID } = req.body
+    const Property  = await db.addProperty(propertyName, Rent, Bills, Maintenance, Event, ERC, managerID)
     res.status(201).send(Property)
 })
 
@@ -53,8 +54,8 @@ app.get('/Residents/:id', async (req, res) => {
 })
 
 app.post('/addResident', async (req, res) => {
-    const { wallet } = req.body
-    const Resident  = await db.addResident(wallet)
+    const { wallet, propertyID } = req.body
+    const Resident  = await db.addResident(wallet, propertyID)
     res.status(201).send(Resident)
 })
 
@@ -109,7 +110,35 @@ app.post('/addPropertyTransaction', async (req, res) => {
     res.status(201).send(PropertyTransaction)
 })
 
+app.post('/verifyERC20', async (req, res) => {
+    const { tokenAddress } = req.body
+    await verify(tokenAddress, ["MyToken", "TKN", 1000])
+    res.status(201).send("Contract Verified!")
+})
 
+app.post('/verifyMaintenence', async (req, res) => {
+    const { maintenenceAddress } = req.body
+    await verify(maintenenceAddress, [])
+    res.status(201).send("Contract Verified!")
+})
+
+app.post('/verifyRent', async (req, res) => {
+    const { rentAddress, tokenAddress, residents } = req.body
+    await verify(rentAddress, [tokenAddress, residents])
+    res.status(201).send("Contract Verified!")
+})
+
+app.post('/verifyEvents', async (req, res) => {
+    const { eventsAddress, rentAddress, tokenAddress } = req.body
+    await verify(eventsAddress, [rentAddress, tokenAddress])
+    res.status(201).send("Contract Verified!")
+})
+
+app.post('/verifyBills', async (req, res) => {
+    const { billsAddress } = req.body
+    await verify(billsAddress, [])
+    res.status(201).send("Contract Verified!")
+})
 
 app.use((err, req, res, next) => {
     console.log(err.stack)
